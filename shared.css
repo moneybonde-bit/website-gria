@@ -1,5 +1,4 @@
-
-  :root{
+:root{
     --black: #0a0a0a;
     --black-soft: #111111;
     --card: #161616;
@@ -395,6 +394,13 @@
     grid-template-columns: repeat(4, 1fr);
     gap: 22px;
   }
+  .values-grid-3{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+  }
+  @media (max-width: 920px){ .values-grid-3{ grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 600px){ .values-grid-3{ grid-template-columns: 1fr; } }
   .value-card{
     position: relative;
     border: 1px solid var(--card-border);
@@ -801,3 +807,15 @@
     .serv-list{ grid-template-columns: 1fr; }
     .footer-bottom{ flex-direction: column; }
   }
+
+  /* ============ WARTA TABLE (dipakai di index.html & warta.html) ============ */
+  .warta-table{ width:100%; border-collapse: collapse; margin: 24px 0 56px; font-size: 14px; }
+  .warta-table th, .warta-table td{
+    border: 1px solid var(--card-border);
+    padding: 12px 14px;
+    text-align: center;
+  }
+  .warta-table th{ background: var(--card); color: var(--neon); font-weight:700; }
+  .warta-table td{ color: #d6d6d6; }
+  .warta-table td:first-child, .warta-table th:first-child{ text-align:left; background: rgba(255,255,255,0.03); font-weight:600; color:#fff; }
+  .warta-scroll{ overflow-x:auto; }
