@@ -97,6 +97,17 @@
   </div>
 </section>
 
+<!-- ============ AYAT HARI INI ============ -->
+<section class="daily-verse-section" aria-label="Ayat Hari Ini">
+  <div class="container">
+    <div class="daily-verse-card reveal">
+      <span class="daily-verse-tag">Ayat Hari Ini</span>
+      <blockquote class="daily-verse-text" id="dailyVerseText"></blockquote>
+      <cite class="daily-verse-ref" id="dailyVerseRef"></cite>
+    </div>
+  </div>
+</section>
+
 <!-- ============ ABOUT ============ -->
 <section class="about" id="about">
   <div class="container">
@@ -611,6 +622,30 @@
     }, { threshold: 0.6 });
     counters.forEach(function(c){ cio.observe(c); });
   }
+
+  /* ---------- Ayat Hari Ini ---------- */
+  var verses = [
+    { text: "Karena begitu besar kasih Allah akan dunia ini, sehingga Ia telah mengaruniakan Anak-Nya yang tunggal, supaya setiap orang yang percaya kepada-Nya tidak binasa, melainkan beroleh hidup yang kekal.", ref: "Yohanes 3:16" },
+    { text: "Sebab Aku ini mengetahui rancangan-rancangan apa yang ada pada-Ku mengenai kamu, demikianlah firman TUHAN, yaitu rancangan damai sejahtera dan bukan rancangan kecelakaan, untuk memberikan kepadamu hari depan yang penuh harapan.", ref: "Yeremia 29:11" },
+    { text: "Janganlah takut, sebab Aku menyertai engkau, janganlah bimbang, sebab Aku ini Allahmu; Aku akan meneguhkan, bahkan akan menolong engkau; Aku akan memegang engkau dengan tangan kanan-Ku yang membawa kemenangan.", ref: "Yesaya 41:10" },
+    { text: "Sebab di mana dua atau tiga orang berkumpul dalam Nama-Ku, di situ Aku ada di tengah-tengah mereka.", ref: "Matius 18:20" },
+    { text: "Segala perkara dapat kutanggung di dalam Dia yang memberi kekuatan kepadaku.", ref: "Filipi 4:13" },
+    { text: "Tuhan adalah gembalaku, takkan kekurangan aku. Ia membaringkan aku di padang yang berumput hijau, Ia membimbing aku ke air yang tenang.", ref: "Mazmur 23:1-2" },
+    { text: "Percayalah kepada TUHAN dengan segenap hatimu dan janganlah bersandar kepada pengertianmu sendiri. Akuilah Dia dalam segala lakumu, maka Ia akan meluruskan jalanmu.", ref: "Amsal 3:5-6" },
+    { text: "Berbahagialah orang yang miskin di hadapan Allah, karena merekalah yang empunya Kerajaan Sorga.", ref: "Matius 5:3" },
+    { text: "Bukan dengan keperkasaan dan bukan dengan kekuatan, melainkan dengan roh-Ku, firman TUHAN semesta alam.", ref: "Zakharia 4:6" },
+    { text: "Sebab kamu tahu bahwa kamu telah ditebus dari cara hidupmu yang sia-sia — bukan dengan barang yang fana, bukan pula dengan perak atau emas.", ref: "1 Petrus 1:18" },
+    { text: "Kasihilah Tuhan, Allahmu, dengan segenap hatimu dan dengan segenap jiwamu dan dengan segenap akal budimu.", ref: "Matius 22:37" },
+    { text: "Aku datang, supaya mereka mempunyai hidup, dan mempunyainya dalam segala kelimpahan.", ref: "Yohanes 10:10" },
+    { text: "Allah kita adalah tempat perlindungan dan kekuatan, sebagai penolong dalam kesesakan sangat terbukti.", ref: "Mazmur 46:2" },
+    { text: "Mintalah, maka akan diberikan kepadamu; carilah, maka kamu akan mendapat; ketoklah, maka pintu akan dibukakan bagimu.", ref: "Matius 7:7" }
+  ];
+  var dayIndex = Math.floor(Date.now() / 86400000) % verses.length;
+  var v = verses[dayIndex];
+  var vt = document.getElementById('dailyVerseText');
+  var vr = document.getElementById('dailyVerseRef');
+  if(vt) vt.textContent = v.text;
+  if(vr) vr.textContent = v.ref;
 
 })();
 </script>
