@@ -304,7 +304,7 @@ section{
   object-fit: contain;
   filter: drop-shadow(0 0 12px rgba(204,255,0,0.25));
 }
-.logo span{ color: var(--neon); }
+.logo span{ color: var(--neon); margin-left: -0.02em; }
 
 .nav-links{
   display:flex;
@@ -1448,6 +1448,60 @@ footer{
   .worship-info-card{ padding: 24px 20px; }
   .verse-box{ padding: 22px 22px 18px; }
   body{ padding-bottom: 90px; }
+}
+
+/* ============ DAILY VERSE ============ */
+.daily-verse-section{ padding: 0 0 clamp(60px,8vw,100px); }
+.daily-verse-card{
+  background: linear-gradient(140deg, rgba(204,255,0,0.06), rgba(204,255,0,0.02));
+  border: 1px solid rgba(204,255,0,0.18);
+  border-radius: var(--r-2xl);
+  padding: clamp(32px,4vw,56px) clamp(28px,5vw,72px);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.daily-verse-card::before{
+  content:'';
+  position:absolute;
+  top:-40%; left:50%;
+  transform:translateX(-50%);
+  width:60%; height:100%;
+  background: radial-gradient(ellipse, rgba(204,255,0,0.12), transparent 70%);
+  filter: blur(40px);
+  pointer-events:none;
+}
+.daily-verse-tag{
+  display:inline-block;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--neon);
+  margin-bottom:20px;
+  position:relative;
+}
+.daily-verse-text{
+  font-family:var(--font-display);
+  font-size:clamp(20px,3vw,30px);
+  font-weight:700;
+  line-height:1.4;
+  color:#fff;
+  font-style:italic;
+  position:relative;
+  margin-bottom:18px;
+  quotes: "\201C" "\201D";
+}
+.daily-verse-text::before{ content: open-quote; color:var(--neon); opacity:.5; margin-right:4px; }
+.daily-verse-text::after{ content: close-quote; color:var(--neon); opacity:.5; margin-left:4px; }
+.daily-verse-ref{
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:0.1em;
+  color:var(--neon);
+  text-transform:uppercase;
+  font-style:normal;
+  position:relative;
 }
 
 /* ============ WARTA TABLE (used in index.html & warta.html) ============ */
