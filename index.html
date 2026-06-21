@@ -16,6 +16,7 @@
 
 <!-- ============ NAVBAR ============ -->
 <nav class="navbar">
+  <div id="scrollProgress"></div>
   <div class="navbar-inner">
     <a href="#" class="logo" style="display:flex;align-items:center;gap:10px;">
       <!-- GANTI src di bawah dengan path logo Anda, contoh: "logo-gria.png" -->
@@ -257,9 +258,20 @@
       </p>
     </div>
 
-    <div class="photo-grid reveal-stagger">
-      <div>Foto 1</div><div>Foto 2</div><div>Foto 3</div><div>Foto 4</div>
-      <div>Foto 5</div><div>Foto 6</div>
+    <div class="photo-grid photo-grid-3 reveal-stagger">
+      <!-- Ganti src dengan foto dokumentasi masing-masing event -->
+      <div class="photo-frame">
+        <img src="foto-ibadah-natal.jpg" alt="Ibadah Natal" onerror="this.style.display='none'">
+        <span>Ibadah Natal</span>
+      </div>
+      <div class="photo-frame">
+        <img src="foto-hut-gria.jpg" alt="HUT GRIA" onerror="this.style.display='none'">
+        <span>HUT GRIA</span>
+      </div>
+      <div class="photo-frame">
+        <img src="foto-kebersamaan-gria.jpg" alt="Kebersamaan GRIA" onerror="this.style.display='none'">
+        <span>Kebersamaan GRIA</span>
+      </div>
     </div>
 
     <div class="annual-verse reveal">
@@ -406,12 +418,15 @@
 
   /* ---------- Navbar background intensify on scroll ---------- */
   var nav = document.querySelector('.navbar');
+  var progressBar = document.getElementById('scrollProgress');
   window.addEventListener('scroll', function(){
     if(window.scrollY > 40){
       nav.style.background = 'rgba(10,10,10,0.92)';
     } else {
       nav.style.background = 'rgba(10,10,10,0.7)';
     }
+    var scrolled = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+    progressBar.style.width = scrolled + '%';
   }, { passive: true });
 
 })();
