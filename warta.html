@@ -2,55 +2,156 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0c">
 <title>Warta Jemaat — GRIA Pemulihan Palu</title>
+<meta name="description" content="Warta jemaat mingguan GRIA Pemulihan Palu — jadwal pelayanan, laporan persembahan, dan informasi umum.">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="shared.css">
 <style>
-  .warta-wrap{ padding: 140px var(--pad) 100px; max-width: var(--container); margin:0 auto; }
-  .warta-table{ width:100%; border-collapse: collapse; margin: 24px 0 56px; font-size: 14px; }
-  .warta-table th, .warta-table td{
-    border: 1px solid var(--card-border);
-    padding: 12px 14px;
-    text-align: center;
+  .warta-wrap{
+    padding: 130px var(--pad) 100px;
+    max-width: var(--container);
+    margin:0 auto;
+    position: relative;
+    z-index: 2;
   }
-  .warta-table th{ background: var(--card); color: var(--neon); font-weight:700; }
-  .warta-table td{ color: #d6d6d6; }
-  .warta-table td:first-child, .warta-table th:first-child{ text-align:left; background: rgba(255,255,255,0.03); font-weight:600; color:#fff; }
-  .warta-scroll{ overflow-x:auto; }
-  .back-link{ display:inline-flex; align-items:center; gap:8px; color: var(--neon); font-weight:600; font-size:14px; margin-bottom:30px; }
+  .warta-hero{
+    background: linear-gradient(155deg, var(--bg-elevated), var(--bg-soft));
+    border: 1px solid var(--card-border);
+    border-radius: var(--r-2xl);
+    padding: 44px clamp(24px,4vw,48px);
+    margin-bottom: 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .warta-hero::before{
+    content:'';
+    position: absolute;
+    top: -50%; right: -10%;
+    width: 60%; height: 100%;
+    background: radial-gradient(ellipse, rgba(204,255,0,0.14), transparent 70%);
+    filter: blur(40px);
+    pointer-events: none;
+  }
+  .warta-hero h1{
+    font-size: clamp(34px, 5vw, 56px);
+    letter-spacing: -0.035em;
+    margin-top: 8px;
+    position: relative;
+  }
+  .warta-hero h1 .accent{
+    background: linear-gradient(100deg, #fff 30%, var(--neon) 85%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .warta-hero p{
+    color: var(--text-mute);
+    margin-top: 14px;
+    font-size: 15px;
+    line-height: 1.7;
+    max-width: 540px;
+    position: relative;
+  }
+  .back-link{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    color: var(--neon);
+    font-weight:600;
+    font-size:14px;
+    margin-bottom:24px;
+    padding: 10px 16px 10px 12px;
+    border-radius: var(--r-full);
+    background: rgba(204,255,0,0.08);
+    border: 1px solid rgba(204,255,0,0.2);
+    transition: background var(--dur-mid) var(--ease-out), transform var(--dur-mid) var(--ease-out);
+    min-height: 40px;
+  }
+  .back-link:hover{
+    background: rgba(204,255,0,0.16);
+    transform: translateX(-4px);
+  }
+
+  .warta-block{ margin-bottom: 56px; }
+  .warta-block h2{
+    font-family: var(--font-display);
+    font-size: clamp(22px, 3vw, 28px);
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .warta-block h2 .badge-num{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width: 36px; height: 36px;
+    background: rgba(204,255,0,0.1);
+    border: 1px solid rgba(204,255,0,0.25);
+    color: var(--neon);
+    border-radius: 12px;
+    font-family: var(--font-display);
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .warta-block .block-lead{
+    color: var(--text-mute);
+    font-size: 14.5px;
+    margin-bottom: 20px;
+    line-height: 1.7;
+  }
 </style>
 </head>
 <body>
 
-<nav class="navbar">
+<nav class="navbar" id="navbar">
+  <div id="scrollProgress"></div>
   <div class="navbar-inner">
-    <a href="index.html" class="logo" style="display:flex;align-items:center;gap:10px;">
-      <img src="logo-gria.png" alt="Logo GRIA" style="height:36px;width:36px;object-fit:contain;" onerror="this.style.display='none'">
+    <a href="index.html" class="logo" aria-label="GRIA — Beranda">
+      <img src="logo-gria.png" alt="" onerror="this.style.display='none'">
       GRI<span>A</span>
     </a>
     <ul class="nav-links" id="navLinks">
       <li><a href="index.html#home">Home</a></li>
       <li><a href="index.html#about">About Us</a></li>
+      <li><a href="index.html#worship">Ibadah</a></li>
       <li><a href="index.html#komunitas">Komunitas</a></li>
       <li><a href="warta.html">Warta</a></li>
       <li><a href="index.html#kontak">Kontak</a></li>
     </ul>
-    <a href="index.html#about" class="nav-cta">About Us</a>
-    <button class="nav-toggle" id="navToggle" aria-label="Buka menu navigasi"><span></span><span></span><span></span></button>
+    <a href="index.html#worship" class="nav-cta">
+      Jadwal Ibadah
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+    <button class="nav-toggle" id="navToggle" aria-label="Buka menu navigasi" aria-expanded="false" aria-controls="navLinks">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
 
 <main class="warta-wrap">
-  <a href="index.html" class="back-link">← Kembali ke Beranda</a>
+  <a href="index.html" class="back-link">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+    Kembali ke Beranda
+  </a>
+
   <!-- AUTO-GENERATED:START -->
-  <span class="eyebrow">Pekan ke-4 Mei | Update Mingguan</span>
-  <h1 class="section-title" style="margin-bottom:40px;">Warta Jemaat</h1>
+  <section class="warta-hero">
+    <span class="eyebrow">Pekan ke-4 Mei • Update Mingguan</span>
+    <h1>Warta <span class="accent">Jemaat</span></h1>
+    <p>Informasi mingguan jemaat GRIA Pemulihan Palu — jadwal pelayanan, laporan persembahan, dan informasi umum. Diperbarui setiap minggu.</p>
+  </section>
 
   <!-- ============ JADWAL PELAYANAN ============ -->
-  <h2 style="font-size:24px;margin-bottom:8px;">Jadwal Pelayanan Dalam Beberapa Pekan</h2>
+  <section class="warta-block">
+    <h2><span class="badge-num">01</span> Jadwal Pelayanan</h2>
+    <p class="block-lead">Pelayan ibadah raya minggu untuk beberapa pekan ke depan.</p>
   <div class="warta-scroll">
     <table class="warta-table">
       <tr>
@@ -98,9 +199,12 @@
     </tr>
     </table>
   </div>
+  </section>
 
   <!-- ============ LAPORAN PERSEMBAHAN ============ -->
-  <h2 style="font-size:24px;margin-bottom:8px;">Laporan Persembahan</h2>
+  <section class="warta-block">
+    <h2><span class="badge-num">02</span> Laporan Persembahan</h2>
+    <p class="block-lead">Rekapitulasi persembahan jemaat sebagai bentuk transparansi pengelolaan.</p>
   <div class="warta-scroll">
     <table class="warta-table">
       <tr>
@@ -141,12 +245,14 @@
     </tr>
     </table>
   </div>
+  </section>
 
   <!-- ============ INFORMASI UMUM ============ -->
-  <h2 style="font-size:24px;margin-bottom:8px;">Informasi Umum</h2>
-  <p style="color:var(--grey);margin-bottom:24px;line-height:1.8;">
-    Pendalaman Alkitab dan Doa diadakan setiap hari Selasa pukul 19.00 WITA — tempat akan diinformasikan melalui grup WhatsApp jemaat.
-  </p>
+  <section class="warta-block">
+    <h2><span class="badge-num">03</span> Informasi Umum</h2>
+    <p class="block-lead">
+      Pendalaman Alkitab dan Doa diadakan setiap hari Selasa pukul 19.00 WITA — tempat akan diinformasikan melalui grup WhatsApp jemaat.
+    </p>
 
   <div class="warta-scroll">
     <table class="warta-table">
@@ -174,6 +280,7 @@
     </tr>
     </table>
   </div>
+  </section>
   <!-- AUTO-GENERATED:END -->
 </main>
 
@@ -181,16 +288,46 @@
   <div class="container">
     <div class="footer-bottom">
       <span>© 2026 GRIA — Gereja Injili Agape Pemulihan Palu. Seluruh hak dilindungi.</span>
-      <a href="index.html">← Kembali ke Beranda</a>
+      <a href="index.html" style="color:var(--neon);font-weight:600;">← Kembali ke Beranda</a>
     </div>
   </div>
 </footer>
 
 <script>
-document.getElementById('navToggle').addEventListener('click', function(){
-  document.getElementById('navLinks').classList.toggle('is-open');
-  this.classList.toggle('is-open');
-});
+(function(){
+  /* Mobile nav toggle */
+  var navToggle = document.getElementById('navToggle');
+  var navLinks = document.getElementById('navLinks');
+  if(navToggle && navLinks){
+    navToggle.addEventListener('click', function(){
+      var open = navLinks.classList.toggle('is-open');
+      navToggle.classList.toggle('is-open', open);
+      navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    navLinks.querySelectorAll('a').forEach(function(link){
+      link.addEventListener('click', function(){
+        navLinks.classList.remove('is-open');
+        navToggle.classList.remove('is-open');
+        navToggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+  }
+
+  /* Navbar scroll state + progress bar */
+  var nav = document.getElementById('navbar');
+  var progressBar = document.getElementById('scrollProgress');
+  function onScroll(){
+    var y = window.scrollY;
+    if(nav) nav.classList.toggle('is-scrolled', y > 40);
+    if(progressBar){
+      var max = document.body.scrollHeight - window.innerHeight;
+      var scrolled = max > 0 ? (y / max) * 100 : 0;
+      progressBar.style.width = scrolled + '%';
+    }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
 </script>
 </body>
 </html>
