@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yayasan Suluh Agape Nusantara — GRIA Pemulihan Palu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+  .yy-hero{ padding: 150px var(--pad) 70px; max-width: 820px; margin:0 auto; text-align:center; }
+  .yy-section{ max-width: var(--container); margin: 0 auto; padding: 0 var(--pad) 90px; }
+  .back-link{ display:inline-flex; align-items:center; gap:8px; color: var(--neon); font-weight:600; font-size:14px; margin-bottom:24px; }
+  .yy-grid{ display:grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 30px; }
+  @media (max-width:760px){ .yy-grid{ grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="logo" style="display:flex;align-items:center;gap:10px;">
+      <img src="logo-gria.png" alt="Logo GRIA" style="height:36px;width:36px;object-fit:contain;" onerror="this.style.display='none'">
+      GRI<span>A</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html#home">Home</a></li>
+      <li><a href="index.html#about">About Us</a></li>
+      <li><a href="index.html#layanan">Layanan</a></li>
+      <li><a href="index.html#komunitas">Komunitas</a></li>
+      <li><a href="warta.html">Warta</a></li>
+      <li><a href="index.html#kontak">Kontak</a></li>
+    </ul>
+    <a href="index.html#about" class="nav-cta">About Us</a>
+    <button class="nav-toggle" id="navToggle" aria-label="Buka menu navigasi"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="yy-hero">
+  <a href="index.html" class="back-link">← Kembali ke Beranda</a>
+  <span class="eyebrow" style="justify-content:center;">Dukung Kami</span>
+  <h1 class="section-title">Yayasan Suluh Agape Nusantara</h1>
+  <p style="color:var(--grey);margin-top:18px;line-height:1.8;">
+    <!-- Ganti paragraf ini dengan deskripsi resmi yayasan -->
+    Yayasan Suluh Agape Nusantara adalah wadah pelayanan sosial GRIA Pemulihan Palu yang berfokus pada pemulihan, pemberdayaan, dan dampak positif bagi masyarakat di Palu dan sekitarnya.
+  </p>
+</div>
+
+<section class="yy-section">
+  <div class="yy-grid">
+    <!-- Copy card ini untuk menambah program lain -->
+    <div class="vm-card">
+      <span class="label">Program 1</span>
+      <p style="font-size:18px;">[Nama Program]</p>
+      <p style="font-family:var(--font-body);font-size:14px;color:var(--grey);font-weight:400;margin-top:10px;">[Deskripsi singkat program dan dampaknya bagi jemaat/masyarakat]</p>
+    </div>
+    <div class="vm-card">
+      <span class="label">Program 2</span>
+      <p style="font-size:18px;">[Nama Program]</p>
+      <p style="font-family:var(--font-body);font-size:14px;color:var(--grey);font-weight:400;margin-top:10px;">[Deskripsi singkat program dan dampaknya bagi jemaat/masyarakat]</p>
+    </div>
+  </div>
+
+  <div class="verse-box" style="margin-top:40px;">
+    <p style="font-style:normal;">
+      <strong style="color:#fff;">Cara Mendukung:</strong><br>
+      <!-- Isi rekening / metode donasi di sini -->
+      Transfer ke rekening [Bank — No. Rekening — a.n. Yayasan Suluh Agape Nusantara]<br>
+      Konfirmasi donasi melalui WhatsApp: <a href="https://wa.me/62xxxxxxxxxx" target="_blank" style="color:var(--neon);">klik di sini</a>
+    </p>
+  </div>
+</section>
+
+<footer id="kontak">
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© 2026 Yayasan Suluh Agape Nusantara — GRIA Pemulihan Palu.</span>
+      <a href="index.html">← Kembali ke Beranda</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.getElementById('navToggle').addEventListener('click', function(){
+  document.getElementById('navLinks').classList.toggle('is-open');
+  this.classList.toggle('is-open');
+});
+</script>
+</body>
+</html>

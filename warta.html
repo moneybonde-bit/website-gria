@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Warta Jemaat — GRIA Pemulihan Palu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+  .warta-wrap{ padding: 140px var(--pad) 100px; max-width: var(--container); margin:0 auto; }
+  .warta-table{ width:100%; border-collapse: collapse; margin: 24px 0 56px; font-size: 14px; }
+  .warta-table th, .warta-table td{
+    border: 1px solid var(--card-border);
+    padding: 12px 14px;
+    text-align: center;
+  }
+  .warta-table th{ background: var(--card); color: var(--neon); font-weight:700; }
+  .warta-table td{ color: #d6d6d6; }
+  .warta-table td:first-child, .warta-table th:first-child{ text-align:left; background: rgba(255,255,255,0.03); font-weight:600; color:#fff; }
+  .warta-scroll{ overflow-x:auto; }
+  .back-link{ display:inline-flex; align-items:center; gap:8px; color: var(--neon); font-weight:600; font-size:14px; margin-bottom:30px; }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="logo" style="display:flex;align-items:center;gap:10px;">
+      <img src="logo-gria.png" alt="Logo GRIA" style="height:36px;width:36px;object-fit:contain;" onerror="this.style.display='none'">
+      GRI<span>A</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html#home">Home</a></li>
+      <li><a href="index.html#about">About Us</a></li>
+      <li><a href="index.html#layanan">Layanan</a></li>
+      <li><a href="index.html#komunitas">Komunitas</a></li>
+      <li><a href="warta.html">Warta</a></li>
+      <li><a href="index.html#kontak">Kontak</a></li>
+    </ul>
+    <a href="index.html#about" class="nav-cta">About Us</a>
+    <button class="nav-toggle" id="navToggle" aria-label="Buka menu navigasi"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<main class="warta-wrap">
+  <a href="index.html" class="back-link">← Kembali ke Beranda</a>
+  <span class="eyebrow">Pekan ke-4 Mei | Update Mingguan</span>
+  <h1 class="section-title" style="margin-bottom:40px;">Warta Jemaat</h1>
+
+  <!-- ============ JADWAL PELAYANAN ============ -->
+  <!-- Setiap minggu: tambah 1 kolom baru, geser yang lama ke kiri atau hapus kolom paling lama -->
+  <h2 style="font-size:24px;margin-bottom:8px;">Jadwal Pelayanan Dalam Beberapa Pekan</h2>
+  <div class="warta-scroll">
+    <table class="warta-table">
+      <tr>
+        <th>Bidang</th>
+        <th>Minggu, 7 Juni 2026</th>
+        <th>Minggu, 14 Juni 2026</th>
+        <th>Minggu, 21 Juni 2026</th>
+        <th>Minggu, 28 Juni 2026</th>
+      </tr>
+      <tr><td>Pelayan Firman</td><td>Ps. Debora Salea</td><td>Ps. Hery Adijanto, Th.M</td><td>Ps. Debora Salea</td><td>Ps. Hery Adijanto, Th.M</td></tr>
+      <tr><td>Liturgos</td><td>Sist Rili</td><td>Sist Selmi</td><td>Sist Sucin</td><td>Sist Miranda</td></tr>
+      <tr><td>Singer</td><td>Sist Sintia & Sist Anggun</td><td>Sist Oisna & Sist Rut</td><td>Sist Anggun & Sist Rut</td><td>Sist Oisna & Sist Sintia</td></tr>
+      <tr><td>Operator LCD</td><td>Sist Taristha</td><td>Sist Ata</td><td>Sist Anggi</td><td>Sist Taristha</td></tr>
+      <tr><td>Pendoa Syafaat</td><td>Sist Vinna</td><td>Ps. Debora Salea</td><td>Bro Delfris</td><td>Sist Rili</td></tr>
+      <tr><td>Kolektan</td><td>Bro Therry</td><td>Sist Anggun</td><td>Bro Therry</td><td>Sist Anggun</td></tr>
+    </table>
+  </div>
+
+  <!-- ============ LAPORAN PERSEMBAHAN ============ -->
+  <h2 style="font-size:24px;margin-bottom:8px;">Laporan Persembahan</h2>
+  <div class="warta-scroll">
+    <table class="warta-table">
+      <tr>
+        <th>Pos</th>
+        <th>Minggu, 3 Mei 2026</th>
+        <th>Minggu, 10 Mei 2026</th>
+        <th>Kamis, 14 Mei 2026</th>
+        <th>Minggu, 17 Mei 2026</th>
+        <th>Minggu, 24 Mei 2026</th>
+      </tr>
+      <tr><td>Kolekte</td><td>Rp 53.000</td><td>Rp 80.000</td><td>Rp 45.000</td><td>Rp 52.000</td><td>Rp 64.000</td></tr>
+      <tr><td>Pembangunan</td><td>Rp 147.000</td><td>Rp 61.000</td><td>-</td><td>Rp 60.000</td><td>Rp 83.000</td></tr>
+      <tr><td>Kasih Agape</td><td>Rp 400.000 | Rp 1.300.000 (4 Mei)</td><td>Rp 300.000</td><td>-</td><td>-</td><td>-</td></tr>
+      <tr><td>Ucapan Syukur</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+    </table>
+  </div>
+
+  <!-- ============ INFORMASI UMUM ============ -->
+  <h2 style="font-size:24px;margin-bottom:8px;">Informasi Umum</h2>
+  <p style="color:var(--grey);margin-bottom:24px;line-height:1.8;">
+    Pendalaman Alkitab dan Doa diadakan setiap hari Selasa pukul 19.00 WITA — tempat akan diinformasikan melalui grup WhatsApp jemaat.
+  </p>
+
+  <div class="warta-scroll">
+    <table class="warta-table">
+      <tr>
+        <th>Bidang</th>
+        <th>Selasa, 2 Juni 2026</th>
+        <th>Selasa, 9 Juni 2026</th>
+        <th>Selasa, 16 Juni 2026</th>
+        <th>Selasa, 23 Juni 2026</th>
+        <th>Selasa, 30 Juni 2026</th>
+      </tr>
+      <tr><td>Pemimpin Doa & Liturgos</td><td>Sist Nanda</td><td>Sist Sharon</td><td>Sist Rut</td><td>Sist Anggi</td><td>Sist Ata</td></tr>
+      <tr><td>Pemimpin PA</td><td>Sist Rili</td><td>Sist Sucin</td><td>Sist Vinna</td><td>Sist Oisna</td><td>Sist Taristha</td></tr>
+    </table>
+  </div>
+</main>
+
+<footer id="kontak">
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© 2026 GRIA — Gereja Injili Agape Pemulihan Palu. Seluruh hak dilindungi.</span>
+      <a href="index.html">← Kembali ke Beranda</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.getElementById('navToggle').addEventListener('click', function(){
+  document.getElementById('navLinks').classList.toggle('is-open');
+  this.classList.toggle('is-open');
+});
+</script>
+</body>
+</html>
