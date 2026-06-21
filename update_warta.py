@@ -141,32 +141,43 @@ def build_info_umum_table(ws):
 
 
 def build_auto_block(jadwal_html, persembahan_html, info_table_html, info_kalimat, pekan_info):
-    eyebrow_text = f"{escape_html(pekan_info)} | Update Mingguan" if pekan_info else "Update Mingguan"
+    eyebrow_text = f"{escape_html(pekan_info)} • Update Mingguan" if pekan_info else "Update Mingguan"
     return f"""<!-- AUTO-GENERATED:START -->
-  <span class="eyebrow">{eyebrow_text}</span>
-  <h1 class="section-title" style="margin-bottom:40px;">Warta Jemaat</h1>
+  <section class="warta-hero">
+    <span class="eyebrow">{eyebrow_text}</span>
+    <h1>Warta <span class="accent">Jemaat</span></h1>
+    <p>Informasi mingguan jemaat GRIA Pemulihan Palu — jadwal pelayanan, laporan persembahan, dan informasi umum. Diperbarui setiap minggu.</p>
+  </section>
 
   <!-- ============ JADWAL PELAYANAN ============ -->
-  <h2 style="font-size:24px;margin-bottom:8px;">Jadwal Pelayanan Dalam Beberapa Pekan</h2>
+  <section class="warta-block">
+    <h2><span class="badge-num">01</span> Jadwal Pelayanan</h2>
+    <p class="block-lead">Pelayan ibadah raya minggu untuk beberapa pekan ke depan.</p>
   <div class="warta-scroll">
     {jadwal_html}
   </div>
+  </section>
 
   <!-- ============ LAPORAN PERSEMBAHAN ============ -->
-  <h2 style="font-size:24px;margin-bottom:8px;">Laporan Persembahan</h2>
+  <section class="warta-block">
+    <h2><span class="badge-num">02</span> Laporan Persembahan</h2>
+    <p class="block-lead">Rekapitulasi persembahan jemaat sebagai bentuk transparansi pengelolaan.</p>
   <div class="warta-scroll">
     {persembahan_html}
   </div>
+  </section>
 
   <!-- ============ INFORMASI UMUM ============ -->
-  <h2 style="font-size:24px;margin-bottom:8px;">Informasi Umum</h2>
-  <p style="color:var(--grey);margin-bottom:24px;line-height:1.8;">
-    {escape_html(info_kalimat)}
-  </p>
+  <section class="warta-block">
+    <h2><span class="badge-num">03</span> Informasi Umum</h2>
+    <p class="block-lead">
+      {escape_html(info_kalimat)}
+    </p>
 
   <div class="warta-scroll">
     {info_table_html}
   </div>
+  </section>
   <!-- AUTO-GENERATED:END -->"""
 
 
