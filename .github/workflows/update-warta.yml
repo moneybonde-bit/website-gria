@@ -35,7 +35,7 @@ jobs:
         run: |
           git config user.name "GRIA Auto Update Bot"
           git config user.email "actions@github.com"
-          git add warta.html
-          git diff --cached --quiet || git commit -m "Auto-update warta.html dari Google Sheet"
+          git add warta.html index.html
+          git diff --cached --quiet || git commit -m "Auto-update warta.html & info ibadah dari Google Sheet"
           git pull --rebase origin main
           git push
