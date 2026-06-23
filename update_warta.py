@@ -1,6 +1,7 @@
 """
 Script ini membaca data dari Google Sheet "Warta Jemaat GRIA" dan
-menghasilkan ulang bagian tabel di warta.html, lalu menimpa file itu.
+menghasilkan ulang bagian tabel di warta.html serta informasi ibadah
+di index.html, lalu menimpa file-file tersebut.
 
 Cara pakai (lokal, untuk testing):
     export GOOGLE_SERVICE_ACCOUNT_KEY='<isi file JSON service account>'
@@ -12,12 +13,14 @@ Di GitHub Actions, kedua env var di atas diambil dari repository secrets.
 
 import os
 import json
+import re
 import sys
 import gspread
 from google.oauth2.service_account import Credentials
 
 SPREADSHEET_ID = os.environ.get("SPREADSHEET_ID", "1QJZf9hmfc5IQe5VE6OpHlLTmegBRhqyQq0wupx8z8fY")
 WARTA_HTML_PATH = os.environ.get("WARTA_HTML_PATH", "warta.html")
+INDEX_HTML_PATH = os.environ.get("INDEX_HTML_PATH", "index.html")
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
 
@@ -181,10 +184,72 @@ def build_auto_block(jadwal_html, persembahan_html, info_table_html, info_kalima
   <!-- AUTO-GENERATED:END -->"""
 
 
+def replace_marker(content, marker_name, new_value):
+    """Replace content between <!-- MARKER_NAME -->...<!-- /MARKER_NAME --> markers."""
+    pattern = re.compile(
+        r"(<!--\s*" + re.escape(marker_name) + r"\s*-->)"
+        r".*?"
+        r"(<!--\s*/" + re.escape(marker_name) + r"\s*-->)",
+        re.DOTALL,
+    )
+    return pattern.sub(r"\1" + escape_html(new_value) + r"\2", content)
+
+
+def read_info_ibadah(ws):
+    """Sheet InfoIbadah: Row 1 = header (Tanggal, Tema, Pembicara), Row 2 = values."""
+    rows = ws.get_all_values()
+    if len(rows) < 2:
+        return None
+    header = [c.strip() for c in rows[0]]
+    values = rows[1]
+
+    def col(name):
+        try:
+            idx = header.index(name)
+            return values[idx].strip() if idx < len(values) else ""
+        except ValueError:
+            return ""
+
+    return {
+        "tanggal": col("Tanggal"),
+        "tema": col("Tema"),
+        "pembicara": col("Pembicara"),
+    }
+
+
+def update_index_html(ibadah_info):
+    """Update worship info markers in index.html with data from InfoIbadah sheet."""
+    if not ibadah_info:
+        print("Tidak ada data InfoIbadah, index.html tidak diupdate.")
+        return False
+
+    with open(INDEX_HTML_PATH, "r", encoding="utf-8") as f:
+        content = f.read()
+
+    new_content = content
+    if ibadah_info["tanggal"]:
+        new_content = replace_marker(new_content, "IBADAH_TANGGAL", ibadah_info["tanggal"])
+    if ibadah_info["tema"]:
+        new_content = replace_marker(new_content, "IBADAH_TEMA", ibadah_info["tema"])
+    if ibadah_info["pembicara"]:
+        new_content = replace_marker(new_content, "IBADAH_PEMBICARA", ibadah_info["pembicara"])
+
+    if new_content == content:
+        print("Tidak ada perubahan data ibadah, index.html tidak ditulis ulang.")
+        return False
+
+    with open(INDEX_HTML_PATH, "w", encoding="utf-8") as f:
+        f.write(new_content)
+
+    print("index.html berhasil diupdate dengan info ibadah dari Google Sheet.")
+    return True
+
+
 def main():
     client = get_client()
     sh = client.open_by_key(SPREADSHEET_ID)
 
+    # --- Update warta.html ---
     ws_jadwal = sh.worksheet("JadwalPelayanan")
     ws_persembahan = sh.worksheet("LaporanPersembahan")
     ws_info = sh.worksheet("InfoUmum")
@@ -212,13 +277,19 @@ def main():
     new_content = content[:start_idx] + new_block + content[end_idx:]
 
     if new_content == content:
-        print("Tidak ada perubahan data, file tidak ditulis ulang.")
-        return
+        print("Tidak ada perubahan data warta, warta.html tidak ditulis ulang.")
+    else:
+        with open(WARTA_HTML_PATH, "w", encoding="utf-8") as f:
+            f.write(new_content)
+        print("warta.html berhasil diupdate dari Google Sheet.")
 
-    with open(WARTA_HTML_PATH, "w", encoding="utf-8") as f:
-        f.write(new_content)
-
-    print("warta.html berhasil diupdate dari Google Sheet.")
+    # --- Update index.html (info ibadah) ---
+    try:
+        ws_ibadah = sh.worksheet("InfoIbadah")
+        ibadah_info = read_info_ibadah(ws_ibadah)
+        update_index_html(ibadah_info)
+    except gspread.exceptions.WorksheetNotFound:
+        print("Sheet 'InfoIbadah' belum ada di spreadsheet. Buat sheet tersebut untuk mengaktifkan auto-update info ibadah.")
 
 
 if __name__ == "__main__":
