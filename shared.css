@@ -788,6 +788,17 @@ section{
 @media (max-width: 920px){ .values-grid-3{ grid-template-columns: 1fr 1fr; } }
 @media (max-width: 600px){ .values-grid-3{ grid-template-columns: 1fr; } }
 
+/* 5-column misi grid responsive */
+@media (max-width: 1100px){
+  .values-grid[style*="repeat(5"]{ grid-template-columns: repeat(3, 1fr) !important; }
+}
+@media (max-width: 760px){
+  .values-grid[style*="repeat(5"]{ grid-template-columns: repeat(2, 1fr) !important; }
+}
+@media (max-width: 500px){
+  .values-grid[style*="repeat(5"]{ grid-template-columns: 1fr !important; }
+}
+
 /* ============ PASTOR ============ */
 .pastor-grid{
   display:grid;
