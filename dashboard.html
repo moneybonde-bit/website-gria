@@ -276,8 +276,8 @@
   // Set tanggal_mulai_baca if first time
   if (!profile.tanggal_mulai_baca) {
     const today = new Date().toISOString().split('T')[0];
-    await supabase
-      .from('profiles')
+    await supabaseClient
+  .from('profiles')
       .update({ tanggal_mulai_baca: today })
       .eq('id', userId);
     profile.tanggal_mulai_baca = today;
@@ -292,15 +292,15 @@
   const currentDay = Math.min(Math.max(diffDays + 1, 1), 365);
 
   // Fetch today's reading plan
-  const { data: todayPlan } = await supabase
-    .from('rencana_baca_harian')
+  const { data: todayPlan } = await supabaseClient
+  .from('rencana_baca_harian')
     .select('*')
     .eq('urutan_hari', currentDay)
     .single();
 
   // Fetch user's progress
-  const { data: progress } = await supabase
-    .from('progres_baca')
+  const { data: progress } = await supabaseClient
+  .from('progres_baca')
     .select('urutan_hari, tanggal_ditandai')
     .eq('user_id', userId);
 
@@ -423,9 +423,9 @@
       btnMark.disabled = true;
       btnMark.textContent = 'Menyimpan...';
 
-      const { error } = await supabase
-        .from('progres_baca')
-        .upsert({
+      const { error } = await supabaseClient
+  .from('progres_baca')
+  .upsert({
           user_id: userId,
           urutan_hari: currentDay,
           sudah_baca: true,
