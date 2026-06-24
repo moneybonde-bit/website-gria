@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0a0a0c">
-<title>Daftar Jadi Anggota Jemaat — GRIA Pemulihan Palu</title>
+<title>Masuk / Daftar Jemaat — GRIA Pemulihan Palu</title>
 <meta name="description" content="Bergabung dengan keluarga GRIA Pemulihan Palu. Daftar jadi anggota jemaat dan ikut program pertumbuhan rohani.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -172,9 +172,9 @@
 
 <main class="login-wrap">
   <div class="login-card">
-    <span class="eyebrow">Bergabung dengan GRIA</span>
-    <h1>Daftar Jadi Anggota Jemaat</h1>
-    <p class="subtitle">Selamat datang di keluarga GRIA Pemulihan Palu. Masukkan email Anda — kami kirim link untuk lanjut ke proses pendaftaran. Sudah pernah daftar? Gunakan email yang sama untuk masuk.</p>
+    <span class="eyebrow">Akses Jemaat GRIA</span>
+    <h1>Masuk / Daftar Jemaat GRIA</h1>
+    <p class="subtitle">Masukkan email Anda. Jika sudah terdaftar, link ini akan membawa Anda langsung ke dashboard. Jika belum, link ini akan memulai proses pendaftaran. Satu pintu untuk keduanya.</p>
 
     <form id="loginForm">
       <div class="form-group">
@@ -182,7 +182,7 @@
         <input type="email" id="email" name="email" placeholder="nama@email.com" required autocomplete="email">
       </div>
       <button type="submit" class="btn-login" id="btnLogin">
-        Kirim Link
+        Lanjutkan dengan Email
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </button>
     </form>
@@ -244,7 +244,7 @@
     if (!email) return;
 
     btn.disabled = true;
-    btn.textContent = 'Mengirim...';
+    btn.textContent = 'Memproses...';
     msg.style.display = 'none';
 
     // Magic link membawa user kembali ke dashboard.html; dashboard akan
@@ -262,10 +262,10 @@
       msg.textContent = 'Gagal mengirim link: ' + error.message;
       msg.style.display = 'block';
       btn.disabled = false;
-      btn.textContent = 'Kirim Link';
+      btn.textContent = 'Lanjutkan dengan Email';
     } else {
       msg.className = 'login-message success';
-      msg.innerHTML = '✓ Link sudah dikirim ke <strong>' + email + '</strong>. Silakan cek inbox (atau folder spam) dan klik link untuk lanjut.';
+      msg.innerHTML = '✓ Link sudah dikirim ke <strong>' + email + '</strong>. Silakan cek inbox (atau folder spam) dan klik link untuk lanjut.<br><br><strong>Penting (pengguna HP):</strong> Jika Anda membuka email di aplikasi Gmail atau aplikasi email bawaan, klik link lalu pilih <em>"Buka di Chrome"</em> atau <em>"Buka di Safari"</em> — jangan biarkan terbuka di browser dalam aplikasi, karena sesi tidak akan tersimpan di sana.';
       msg.style.display = 'block';
       btn.disabled = true;
       btn.textContent = 'Link Terkirim';

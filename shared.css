@@ -392,6 +392,17 @@ section{
     padding: 14px 16px;
     width: 100%;
   }
+  .nav-links .nav-login-link{
+    background: var(--neon);
+    color: #0a0a0a;
+    border-radius: var(--r-full);
+    margin-top: 12px;
+    text-align: center;
+  }
+  .nav-links .nav-login-link:hover{
+    background: var(--neon);
+    color: #0a0a0a;
+  }
   .nav-cta{ display:none; }
   .nav-toggle{ display:flex; }
   .nav-toggle.is-open span:nth-child(1){ transform: translateY(7px) rotate(45deg); }
