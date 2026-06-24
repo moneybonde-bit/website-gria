@@ -3,7 +3,7 @@
 // Anon Key AMAN untuk dipublish di repo publik SELAMA Row Level Security (RLS) sudah aktif.
 // Lihat: https://supabase.com/docs/guides/auth#api-keys
 
-const SUPABASE_URL = 'https://YOUR_PROJECT_ID.supabase.co';
-const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY_HERE';
+const SUPABASE_URL = 'https://sdlzgekgjdpleiknwenj.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_sxbY07LylMa-w2ebAy6p1g_qFfCQ3_D';
 
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
