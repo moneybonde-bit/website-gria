@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0c">
+<title>Dashboard — GRIA Pemulihan Palu</title>
+<meta name="description" content="Tracker baca Alkitab pribadi jemaat GRIA Pemulihan Palu.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+  .dash-wrap{
+    padding: 110px var(--pad) 80px;
+    max-width: var(--container);
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+  .dash-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 36px;
+  }
+  .dash-header h1{
+    font-size: clamp(24px, 4vw, 36px);
+    letter-spacing: -0.03em;
+  }
+  .btn-logout{
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-mute);
+    background: var(--bg-elevated);
+    border: 1px solid var(--card-border);
+    border-radius: var(--r-full);
+    cursor: pointer;
+    transition: background var(--dur-mid) var(--ease-out), color var(--dur-mid) var(--ease-out);
+  }
+  .btn-logout:hover{
+    background: var(--bg-elevated-2);
+    color: var(--text);
+  }
+
+  .dash-grid{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  @media(min-width:768px){
+    .dash-grid{ grid-template-columns: 1fr 1fr; }
+    .dash-grid .card-full{ grid-column: 1 / -1; }
+  }
+
+  .dash-card{
+    background: linear-gradient(155deg, var(--bg-elevated), var(--bg-soft));
+    border: 1px solid var(--card-border);
+    border-radius: var(--r-xl);
+    padding: 28px clamp(20px, 3vw, 32px);
+    position: relative;
+    overflow: hidden;
+  }
+  .dash-card::before{
+    content: '';
+    position: absolute;
+    top: -40%; right: -15%;
+    width: 50%; height: 80%;
+    background: radial-gradient(ellipse, rgba(204,255,0,0.06), transparent 70%);
+    filter: blur(30px);
+    pointer-events: none;
+  }
+  .dash-card h2{
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-mute);
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .dash-card .big-num{
+    font-family: var(--font-display);
+    font-size: clamp(36px, 5vw, 52px);
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+  .dash-card .big-num .accent{
+    color: var(--neon);
+  }
+  .dash-card .detail{
+    color: var(--text-mute);
+    font-size: 14px;
+    margin-top: 8px;
+    line-height: 1.6;
+  }
+
+  /* Progress bar */
+  .progress-wrap{
+    margin-top: 20px;
+    position: relative;
+  }
+  .progress-bar{
+    height: 12px;
+    background: var(--bg-deep);
+    border-radius: var(--r-full);
+    overflow: hidden;
+    border: 1px solid var(--card-border);
+  }
+  .progress-fill{
+    height: 100%;
+    background: linear-gradient(90deg, var(--neon-dim), var(--neon));
+    border-radius: var(--r-full);
+    transition: width 0.8s var(--ease-out);
+    box-shadow: 0 0 12px var(--neon-glow);
+  }
+  .progress-label{
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--text-mute);
+    margin-top: 10px;
+  }
+
+  /* Today's reading */
+  .reading-today{
+    position: relative;
+  }
+  .reading-ref{
+    font-size: clamp(18px, 2.5vw, 24px);
+    font-weight: 700;
+    color: #fff;
+    margin: 8px 0 4px;
+    line-height: 1.4;
+  }
+  .reading-day{
+    color: var(--neon);
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .btn-mark{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 20px;
+    padding: 14px 24px;
+    background: var(--neon);
+    color: #000;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 700;
+    border: none;
+    border-radius: var(--r-md);
+    cursor: pointer;
+    transition: transform var(--dur-mid) var(--ease-spring), box-shadow var(--dur-mid) var(--ease-out);
+  }
+  .btn-mark:hover{
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow);
+  }
+  .btn-mark:disabled{
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+  .btn-mark.done{
+    background: rgba(204,255,0,0.15);
+    color: var(--neon);
+    border: 1px solid rgba(204,255,0,0.3);
+  }
+
+  /* Warta summary */
+  .warta-summary{
+    position: relative;
+  }
+  .warta-summary .warta-item{
+    padding: 12px 0;
+    border-bottom: 1px solid var(--card-border);
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .warta-summary .warta-item:last-child{ border-bottom: none; }
+  .warta-summary .warta-item strong{
+    color: var(--neon);
+    font-weight: 600;
+  }
+  .warta-link{
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--neon);
+    font-size: 13px;
+    font-weight: 600;
+    margin-top: 12px;
+    transition: gap var(--dur-mid) var(--ease-out);
+  }
+  .warta-link:hover{ gap: 10px; }
+
+  /* Loading state */
+  .loading{
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-mute);
+    font-size: 15px;
+  }
+  .loading::after{
+    content: '';
+    display: block;
+    width: 28px; height: 28px;
+    border: 3px solid var(--card-border);
+    border-top-color: var(--neon);
+    border-radius: 50%;
+    margin: 16px auto 0;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin{ to{ transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<nav class="navbar" id="navbar">
+  <div id="scrollProgress"></div>
+  <div class="navbar-inner">
+    <a href="index.html" class="logo" aria-label="GRIA — Beranda">
+      <img src="logo-gria.png" alt="" onerror="this.style.display='none'">
+      GRI<span>A</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html#home">Home</a></li>
+      <li><a href="about-us.html">About Us</a></li>
+      <li><a href="komunitas.html">Komunitas</a></li>
+      <li><a href="warta.html">Warta</a></li>
+      <li><a href="index.html#kontak">Kontak</a></li>
+      <li><a href="dashboard.html" class="nav-login-link">Dashboard</a></li>
+    </ul>
+    <a href="dashboard.html" class="nav-cta">
+      Dashboard
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    </a>
+    <button class="nav-toggle" id="navToggle" aria-label="Buka menu navigasi" aria-expanded="false" aria-controls="navLinks">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<main class="dash-wrap" id="dashContent">
+  <div class="loading" id="loadingState">Memuat dashboard...</div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/auth.js"></script>
+<script>
+(async function() {
+  const session = await getSession();
+  if (!session) {
+    window.location.href = 'login.html';
+    return;
+  }
+
+  const userId = session.user.id;
+  const profile = await getProfile(userId);
+
+  // Set tanggal_mulai_baca if first time
+  if (!profile.tanggal_mulai_baca) {
+    const today = new Date().toISOString().split('T')[0];
+    await supabase
+      .from('profiles')
+      .update({ tanggal_mulai_baca: today })
+      .eq('id', userId);
+    profile.tanggal_mulai_baca = today;
+  }
+
+  // Calculate current day number
+  const startDate = new Date(profile.tanggal_mulai_baca);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  startDate.setHours(0, 0, 0, 0);
+  const diffDays = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
+  const currentDay = Math.min(Math.max(diffDays + 1, 1), 365);
+
+  // Fetch today's reading plan
+  const { data: todayPlan } = await supabase
+    .from('rencana_baca_harian')
+    .select('*')
+    .eq('urutan_hari', currentDay)
+    .single();
+
+  // Fetch user's progress
+  const { data: progress } = await supabase
+    .from('progres_baca')
+    .select('urutan_hari, tanggal_ditandai')
+    .eq('user_id', userId);
+
+  const completedDays = progress ? progress.length : 0;
+  const percentage = Math.round((completedDays / 365) * 100);
+  const todayDone = progress && progress.some(p => p.urutan_hari === currentDay);
+
+  // Estimate completion date
+  let estimatedEnd = '—';
+  if (completedDays > 0) {
+    const daysSinceStart = diffDays + 1;
+    const pace = completedDays / daysSinceStart;
+    const remainingDays = 365 - completedDays;
+    const daysNeeded = Math.ceil(remainingDays / pace);
+    const endDate = new Date();
+    endDate.setDate(endDate.getDate() + daysNeeded);
+    estimatedEnd = endDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+  } else {
+    const endDate = new Date(startDate);
+    endDate.setDate(endDate.getDate() + 365);
+    estimatedEnd = endDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+  }
+
+  // Fetch warta info
+  let wartaHtml = '<p class="detail">Tidak dapat memuat info ibadah.</p>';
+  try {
+    const resp = await fetch('warta.html');
+    const html = await resp.text();
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    const table = doc.querySelector('.warta-table');
+    if (table) {
+      const headers = table.querySelectorAll('th');
+      const rows = table.querySelectorAll('tr');
+      let nextSunday = '';
+      if (headers.length > 1) {
+        nextSunday = headers[1].textContent.trim();
+      }
+      let items = [];
+      rows.forEach((row, i) => {
+        if (i === 0) return;
+        const cells = row.querySelectorAll('td');
+        if (cells.length >= 2) {
+          const field = cells[0].textContent.trim();
+          const value = cells[1].textContent.trim();
+          if (value && field) {
+            items.push({ field, value });
+          }
+        }
+      });
+      if (items.length > 0) {
+        wartaHtml = '<div class="warta-item"><strong>' + nextSunday + '</strong></div>';
+        items.slice(0, 5).forEach(item => {
+          wartaHtml += '<div class="warta-item"><strong>' + item.field + ':</strong> ' + item.value + '</div>';
+        });
+      }
+    }
+  } catch(e) {}
+
+  // Render dashboard
+  const nama = profile.nama || session.user.email.split('@')[0];
+  const startFormatted = startDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+
+  document.getElementById('dashContent').innerHTML = `
+    <div class="dash-header">
+      <div>
+        <span class="eyebrow">Tracker Baca Alkitab</span>
+        <h1>Halo, ${nama}!</h1>
+      </div>
+      <button class="btn-logout" onclick="signOut()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+        Logout
+      </button>
+    </div>
+
+    <div class="dash-grid">
+      <!-- Today's Reading -->
+      <div class="dash-card reading-today">
+        <h2>Bacaan Hari Ini</h2>
+        <span class="reading-day">Hari ke-${currentDay} dari 365</span>
+        <p class="reading-ref">${todayPlan ? todayPlan.referensi_ayat : '—'}</p>
+        <p class="detail">Mulai baca: ${startFormatted}</p>
+        <button class="btn-mark ${todayDone ? 'done' : ''}" id="btnMark" ${todayDone ? 'disabled' : ''}>
+          ${todayDone ? '✓ Sudah Ditandai' : 'Tandai Sudah Baca'}
+        </button>
+      </div>
+
+      <!-- Progress -->
+      <div class="dash-card">
+        <h2>Progres Keseluruhan</h2>
+        <div class="big-num">${completedDays}<span class="accent">/${365}</span></div>
+        <p class="detail">hari selesai (${percentage}%)</p>
+        <div class="progress-wrap">
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: ${percentage}%"></div>
+          </div>
+          <div class="progress-label">
+            <span>Mulai: ${startFormatted}</span>
+            <span>Est. selesai: ${estimatedEnd}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Warta Summary -->
+      <div class="dash-card card-full warta-summary">
+        <h2>Info Ibadah Minggu Ini</h2>
+        ${wartaHtml}
+        <a href="warta.html" class="warta-link">
+          Lihat warta lengkap
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+    </div>
+  `;
+
+  // Mark as read handler
+  const btnMark = document.getElementById('btnMark');
+  if (btnMark && !todayDone) {
+    btnMark.addEventListener('click', async () => {
+      btnMark.disabled = true;
+      btnMark.textContent = 'Menyimpan...';
+
+      const { error } = await supabase
+        .from('progres_baca')
+        .upsert({
+          user_id: userId,
+          urutan_hari: currentDay,
+          sudah_baca: true,
+          tanggal_ditandai: new Date().toISOString()
+        }, { onConflict: 'user_id,urutan_hari' });
+
+      if (error) {
+        btnMark.textContent = 'Gagal, coba lagi';
+        btnMark.disabled = false;
+      } else {
+        btnMark.className = 'btn-mark done';
+        btnMark.textContent = '✓ Sudah Ditandai';
+      }
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
