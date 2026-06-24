@@ -134,8 +134,8 @@ def main():
     try:
         ws = sh.worksheet("UlangTahun")
     except gspread.exceptions.WorksheetNotFound:
-        print("ERROR: Sheet 'UlangTahun' tidak ditemukan di spreadsheet.")
-        sys.exit(1)
+        print("Sheet 'UlangTahun' belum ada di spreadsheet — buat tab tersebut untuk mengaktifkan auto-update ulang tahun.")
+        sys.exit(0)
 
     bday_html = build_bday_html(ws, bulan_ini)
 
