@@ -73,28 +73,38 @@ def build_bday_html(ws, bulan_ini):
     header = [c.strip().lower() for c in rows[0]]
     data_rows = rows[1:]
 
+    print(f"  Header kolom: {header}")
+    print(f"  Total baris data: {len(data_rows)}")
+
     try:
         idx_nama = next(i for i, h in enumerate(header) if "nama" in h)
         idx_tgl = next(i for i, h in enumerate(header) if "tanggal" in h)
         idx_bln = next(i for i, h in enumerate(header) if "bulan" in h)
     except StopIteration:
-        print("ERROR: Kolom Nama/Tanggal/Bulan tidak ditemukan di sheet UlangTahun.")
+        print(f"ERROR: Kolom Nama/Tanggal/Bulan tidak ditemukan. Header: {header}")
         return _empty_msg("Format kolom sheet tidak sesuai.")
 
+    print(f"  Kolom ditemukan — Nama:{idx_nama}, Tanggal:{idx_tgl}, Bulan:{idx_bln}")
+
     daftar = []
-    for row in data_rows:
+    for i, row in enumerate(data_rows, start=2):
         if len(row) <= max(idx_nama, idx_tgl, idx_bln):
+            print(f"  Baris {i} dilewati (kolom tidak lengkap): {row}")
             continue
         nama = row[idx_nama].strip()
         tgl_str = row[idx_tgl].strip()
         bln_str = row[idx_bln].strip()
         if not nama or not tgl_str or not bln_str:
+            print(f"  Baris {i} dilewati (ada nilai kosong): nama={repr(nama)}, tgl={repr(tgl_str)}, bln={repr(bln_str)}")
             continue
         try:
-            tgl = int(tgl_str)
-            bln = int(bln_str)
+            # Gunakan float() dulu untuk menangani "6.0" atau "6" dengan benar
+            tgl = int(float(tgl_str))
+            bln = int(float(bln_str))
         except ValueError:
+            print(f"  Baris {i} dilewati (gagal parse angka): tgl={repr(tgl_str)}, bln={repr(bln_str)}")
             continue
+        print(f"  Baris {i}: {nama} — tanggal {tgl}, bulan {bln} (filter bulan: {bulan_ini}) → {'MASUK' if bln == bulan_ini else 'lewat'}")
         if bln == bulan_ini:
             daftar.append((tgl, nama))
 
