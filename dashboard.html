@@ -266,12 +266,18 @@
 (async function() {
   const session = await getSession();
   if (!session) {
-    window.location.href = 'login.html';
+    window.location.href = 'daftar.html';
     return;
   }
 
   const userId = session.user.id;
   const profile = await getProfile(userId);
+
+  // Belum selesai onboarding? alihkan dulu.
+  if (!profile.onboarding_selesai) {
+    window.location.href = 'onboarding.html';
+    return;
+  }
 
   // Set tanggal_mulai_baca if first time
   if (!profile.tanggal_mulai_baca) {
