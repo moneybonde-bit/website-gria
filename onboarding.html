@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0c">
+<title>Onboarding Jemaat — GRIA Pemulihan Palu</title>
+<meta name="description" content="Lengkapi data, kenali program baca Alkitab, dan resmi jadi anggota jemaat GRIA Pemulihan Palu.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+  .ob-wrap{
+    padding: 120px var(--pad) 80px;
+    max-width: 640px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+  .ob-card{
+    background: linear-gradient(155deg, var(--bg-elevated), var(--bg-soft));
+    border: 1px solid var(--card-border);
+    border-radius: var(--r-2xl);
+    padding: 40px clamp(22px, 4vw, 44px);
+    position: relative;
+    overflow: hidden;
+  }
+  .ob-card::before{
+    content: '';
+    position: absolute;
+    top: -60%; right: -20%;
+    width: 70%; height: 120%;
+    background: radial-gradient(ellipse, rgba(204,255,0,0.1), transparent 70%);
+    filter: blur(40px);
+    pointer-events: none;
+  }
+  .ob-steps{
+    display: flex;
+    gap: 8px;
+    margin-bottom: 28px;
+    position: relative;
+  }
+  .ob-steps .dot{
+    flex: 1;
+    height: 4px;
+    background: var(--card-border-strong);
+    border-radius: var(--r-full);
+    transition: background var(--dur-mid) var(--ease-out);
+  }
+  .ob-steps .dot.active{ background: var(--neon); }
+  .ob-card h1{
+    font-size: clamp(24px, 4vw, 32px);
+    letter-spacing: -0.03em;
+    margin-bottom: 10px;
+    position: relative;
+  }
+  .ob-card .subtitle{
+    color: var(--text-mute);
+    font-size: 14.5px;
+    line-height: 1.7;
+    margin-bottom: 28px;
+    position: relative;
+  }
+  .form-row{ margin-bottom: 18px; position: relative; }
+  .form-row label{
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-mute);
+    margin-bottom: 6px;
+    letter-spacing: 0.02em;
+  }
+  .form-row input,
+  .form-row select,
+  .form-row textarea{
+    width: 100%;
+    padding: 12px 14px;
+    background: var(--bg-deep);
+    border: 1px solid var(--card-border-strong);
+    border-radius: var(--r-md);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 15px;
+    transition: border-color var(--dur-mid) var(--ease-out), box-shadow var(--dur-mid) var(--ease-out);
+    outline: none;
+  }
+  .form-row textarea{ resize: vertical; min-height: 70px; }
+  .form-row input:focus,
+  .form-row select:focus,
+  .form-row textarea:focus{
+    border-color: var(--neon);
+    box-shadow: 0 0 0 3px var(--neon-soft);
+  }
+  .form-row .hint{
+    font-size: 12px;
+    color: var(--grey-dim);
+    margin-top: 6px;
+  }
+  .form-grid-2{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  @media(min-width:560px){
+    .form-grid-2{ grid-template-columns: 1fr 1fr; gap: 0 16px; }
+  }
+  .ob-actions{
+    display: flex;
+    gap: 12px;
+    margin-top: 28px;
+    position: relative;
+  }
+  .btn-primary-full,
+  .btn-secondary-full{
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 20px;
+    font-family: var(--font-body);
+    font-size: 14.5px;
+    font-weight: 700;
+    border: none;
+    border-radius: var(--r-md);
+    cursor: pointer;
+    transition: transform var(--dur-mid) var(--ease-spring), box-shadow var(--dur-mid) var(--ease-out), background var(--dur-mid) var(--ease-out);
+  }
+  .btn-primary-full{
+    background: var(--neon);
+    color: #000;
+  }
+  .btn-primary-full:hover:not(:disabled){
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow);
+  }
+  .btn-primary-full:disabled{
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .btn-secondary-full{
+    background: transparent;
+    color: var(--text-mute);
+    border: 1px solid var(--card-border-strong);
+  }
+  .btn-secondary-full:hover{ color: var(--text); background: var(--bg-elevated-2); }
+
+  /* Panduan step */
+  .panduan-list{
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 8px;
+    position: relative;
+  }
+  .panduan-item{
+    display: flex;
+    gap: 14px;
+    padding: 14px 16px;
+    background: var(--bg-deep);
+    border: 1px solid var(--card-border);
+    border-radius: var(--r-md);
+  }
+  .panduan-item .num{
+    flex: 0 0 28px;
+    height: 28px;
+    border-radius: var(--r-full);
+    background: var(--neon);
+    color: #000;
+    font-weight: 800;
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .panduan-item h4{
+    font-family: var(--font-display);
+    font-size: 15px;
+    margin-bottom: 4px;
+    color: #fff;
+  }
+  .panduan-item p{
+    font-size: 13.5px;
+    color: var(--text-mute);
+    line-height: 1.6;
+  }
+
+  /* Komitmen step */
+  .komitmen-text{
+    padding: 18px 20px;
+    background: var(--bg-deep);
+    border: 1px solid var(--card-border);
+    border-radius: var(--r-md);
+    color: var(--text);
+    font-size: 14.5px;
+    line-height: 1.75;
+    margin-top: 6px;
+    position: relative;
+  }
+  .komitmen-check{
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-top: 20px;
+    padding: 14px 16px;
+    background: var(--bg-deep);
+    border: 1px solid var(--card-border-strong);
+    border-radius: var(--r-md);
+    cursor: pointer;
+    position: relative;
+  }
+  .komitmen-check input{
+    flex: 0 0 18px;
+    width: 18px; height: 18px;
+    margin-top: 2px;
+    accent-color: var(--neon);
+    cursor: pointer;
+  }
+  .komitmen-check span{
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text);
+  }
+
+  .ob-msg{
+    margin-top: 14px;
+    padding: 12px 14px;
+    border-radius: var(--r-sm);
+    font-size: 13.5px;
+    line-height: 1.6;
+    display: none;
+    position: relative;
+  }
+  .ob-msg.error{
+    display: block;
+    background: rgba(255,80,80,0.1);
+    border: 1px solid rgba(255,80,80,0.25);
+    color: #ff6b6b;
+  }
+
+  .loading{
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-mute);
+    font-size: 15px;
+  }
+  .loading::after{
+    content: '';
+    display: block;
+    width: 28px; height: 28px;
+    border: 3px solid var(--card-border);
+    border-top-color: var(--neon);
+    border-radius: 50%;
+    margin: 16px auto 0;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin{ to{ transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<nav class="navbar" id="navbar">
+  <div id="scrollProgress"></div>
+  <div class="navbar-inner">
+    <a href="index.html" class="logo" aria-label="GRIA — Beranda">
+      <img src="logo-gria.png" alt="" onerror="this.style.display='none'">
+      GRI<span>A</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html#home">Home</a></li>
+      <li><a href="about-us.html">About Us</a></li>
+      <li><a href="komunitas.html">Komunitas</a></li>
+      <li><a href="warta.html">Warta</a></li>
+      <li><a href="index.html#kontak">Kontak</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Buka menu navigasi" aria-expanded="false" aria-controls="navLinks">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<main class="ob-wrap">
+  <div class="loading" id="loadingState">Memuat...</div>
+
+  <div class="ob-card" id="obCard" style="display:none;">
+    <div class="ob-steps" aria-label="Progres onboarding">
+      <div class="dot active" data-step="1"></div>
+      <div class="dot" data-step="2"></div>
+      <div class="dot" data-step="3"></div>
+    </div>
+
+    <!-- ============ STEP 1: Data Diri ============ -->
+    <section id="step1">
+      <span class="eyebrow">Langkah 1 dari 3</span>
+      <h1>Lengkapi Data Anda</h1>
+      <p class="subtitle">Data ini membantu kami mengenal Anda lebih baik dan menjaga komunikasi tetap personal. Semua kolom wajib diisi.</p>
+
+      <form id="formData">
+        <div class="form-row">
+          <label for="nama">Nama Lengkap</label>
+          <input type="text" id="nama" name="nama" required autocomplete="name" placeholder="Nama sesuai KTP">
+        </div>
+
+        <div class="form-row">
+          <label for="jenis_kelamin">Jenis Kelamin</label>
+          <select id="jenis_kelamin" name="jenis_kelamin" required>
+            <option value="">— Pilih —</option>
+            <option value="Laki-laki">Laki-laki</option>
+            <option value="Perempuan">Perempuan</option>
+          </select>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-row">
+            <label for="tempat_lahir">Tempat Lahir</label>
+            <input type="text" id="tempat_lahir" name="tempat_lahir" required placeholder="mis. Palu">
+          </div>
+          <div class="form-row">
+            <label for="tanggal_lahir">Tanggal Lahir</label>
+            <input type="date" id="tanggal_lahir" name="tanggal_lahir" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label for="usia">Usia</label>
+          <input type="text" id="usia" name="usia" readonly placeholder="terisi otomatis dari tanggal lahir">
+          <p class="hint">Dihitung otomatis dari tanggal lahir.</p>
+        </div>
+
+        <div class="form-row">
+          <label for="alamat">Alamat / Kota Domisili</label>
+          <input type="text" id="alamat" name="alamat" required placeholder="mis. Palu Barat, Sulawesi Tengah">
+        </div>
+
+        <div class="form-row">
+          <label for="pekerjaan">Pekerjaan Saat Ini</label>
+          <input type="text" id="pekerjaan" name="pekerjaan" required placeholder="mis. Karyawan / Mahasiswa / Wirausaha">
+        </div>
+
+        <div class="form-row">
+          <label for="nomor_wa">Nomor WhatsApp Aktif</label>
+          <input type="tel" id="nomor_wa" name="nomor_wa" required placeholder="mis. 081234567890" inputmode="tel">
+          <p class="hint">Nomor Indonesia yang aktif. Boleh diawali 0 atau +62.</p>
+        </div>
+
+        <div class="ob-msg" id="msg1"></div>
+
+        <div class="ob-actions">
+          <button type="submit" class="btn-primary-full" id="btnNext1" disabled>
+            Lanjut
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- ============ STEP 2: Panduan Bible Reading ============ -->
+    <section id="step2" style="display:none;">
+      <span class="eyebrow">Langkah 2 dari 3</span>
+      <h1>Tentang Program Baca Alkitab</h1>
+      <p class="subtitle">Sebelum mulai, kenali dulu programnya. Sederhana, tapi berdampak panjang bila Anda jalani dengan setia.</p>
+
+      <div class="panduan-list">
+        <div class="panduan-item">
+          <div class="num">1</div>
+          <div>
+            <h4>Satu Tahun Bersama Firman</h4>
+            <p>365 hari bacaan harian yang membawa Anda menjelajah Perjanjian Lama dan Perjanjian Baru — dari Kejadian sampai Wahyu. Porsinya ringan tiap hari, supaya bisa dijaga konsisten di tengah kesibukan.</p>
+          </div>
+        </div>
+        <div class="panduan-item">
+          <div class="num">2</div>
+          <div>
+            <h4>Mengapa Penting</h4>
+            <p>Firman bukan sekadar bacaan — ia membentuk cara kita berpikir, merespons, dan hidup. Dengan ritme harian, Anda membangun kebiasaan rohani yang akan menemani sepanjang hidup, bukan sekadar momentum sesaat.</p>
+          </div>
+        </div>
+        <div class="panduan-item">
+          <div class="num">3</div>
+          <div>
+            <h4>Cara Kerja Tracker</h4>
+            <p>Setiap hari, dashboard menampilkan bacaan Anda. Selesai membaca, klik <strong>Tandai Sudah Baca</strong>. Progres Anda tersimpan, jadi Anda bisa lihat seberapa jauh perjalanan dan kapan kira-kira selesai.</p>
+          </div>
+        </div>
+        <div class="panduan-item">
+          <div class="num">4</div>
+          <div>
+            <h4>Tidak Sendirian</h4>
+            <p>Anda menjalani ini bersama jemaat GRIA lainnya. Bila terlewat satu-dua hari, tidak apa — yang penting kembali. Komunitas ada untuk saling menguatkan.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="ob-actions">
+        <button type="button" class="btn-secondary-full" id="btnBack2">Kembali</button>
+        <button type="button" class="btn-primary-full" id="btnNext2">
+          Lanjut
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- ============ STEP 3: Komitmen ============ -->
+    <section id="step3" style="display:none;">
+      <span class="eyebrow">Langkah 3 dari 3</span>
+      <h1>Pernyataan Keanggotaan</h1>
+      <p class="subtitle">Sebelum diresmikan, bacalah pernyataan singkat berikut.</p>
+
+      <div class="komitmen-text">
+        Dengan sepenuh hati, saya bersedia menjadi bagian dari keluarga jemaat <strong>GRIA Pemulihan Palu</strong>. Saya berkomitmen untuk bertumbuh bersama dalam iman — termasuk mengikuti program baca Alkitab setahun ini sebagai langkah nyata mengenal firman Tuhan lebih dalam. Saya datang dengan hati yang terbuka untuk belajar, didampingi, dan saling menguatkan dalam komunitas.
+      </div>
+
+      <label class="komitmen-check">
+        <input type="checkbox" id="chkSetuju">
+        <span>Saya membaca dan menyetujui pernyataan di atas, dan ingin resmi menjadi anggota jemaat GRIA Pemulihan Palu.</span>
+      </label>
+
+      <div class="ob-msg" id="msg3"></div>
+
+      <div class="ob-actions">
+        <button type="button" class="btn-secondary-full" id="btnBack3">Kembali</button>
+        <button type="button" class="btn-primary-full" id="btnFinish" disabled>
+          Saya Setuju &amp; Lanjutkan
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+        </button>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/auth.js"></script>
+<script>
+(async function() {
+  const session = await getSession();
+  if (!session) {
+    window.location.href = 'daftar.html';
+    return;
+  }
+  const userId = session.user.id;
+
+  let profile;
+  try {
+    profile = await getProfile(userId);
+  } catch (e) {
+    document.getElementById('loadingState').textContent = 'Gagal memuat profil. Coba muat ulang halaman.';
+    return;
+  }
+
+  // Sudah selesai onboarding? langsung ke dashboard.
+  if (profile.onboarding_selesai === true) {
+    window.location.href = 'dashboard.html';
+    return;
+  }
+
+  // Tampilkan card
+  document.getElementById('loadingState').style.display = 'none';
+  document.getElementById('obCard').style.display = 'block';
+
+  // Pre-fill bila user sudah pernah isi sebagian
+  const setVal = (id, v) => { const el = document.getElementById(id); if (el && v != null) el.value = v; };
+  setVal('nama', profile.nama);
+  setVal('jenis_kelamin', profile.jenis_kelamin);
+  setVal('tempat_lahir', profile.tempat_lahir);
+  setVal('tanggal_lahir', profile.tanggal_lahir);
+  setVal('alamat', profile.alamat);
+  setVal('pekerjaan', profile.pekerjaan);
+  setVal('nomor_wa', profile.nomor_wa);
+
+  // Step state
+  const sections = {
+    1: document.getElementById('step1'),
+    2: document.getElementById('step2'),
+    3: document.getElementById('step3'),
+  };
+  const dots = document.querySelectorAll('.ob-steps .dot');
+  function goStep(n) {
+    Object.entries(sections).forEach(([k, el]) => {
+      el.style.display = (+k === n) ? '' : 'none';
+    });
+    dots.forEach(d => {
+      d.classList.toggle('active', +d.dataset.step <= n);
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ===== Step 1: validation & age calculation =====
+  const form1 = document.getElementById('formData');
+  const btnNext1 = document.getElementById('btnNext1');
+  const usiaInput = document.getElementById('usia');
+  const tglInput = document.getElementById('tanggal_lahir');
+  const waInput = document.getElementById('nomor_wa');
+  const msg1 = document.getElementById('msg1');
+
+  function calcUsia(dateStr) {
+    if (!dateStr) return '';
+    const d = new Date(dateStr);
+    if (isNaN(d)) return '';
+    const today = new Date();
+    let years = today.getFullYear() - d.getFullYear();
+    const m = today.getMonth() - d.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < d.getDate())) years--;
+    return years >= 0 ? years + ' tahun' : '';
+  }
+  tglInput.addEventListener('change', () => {
+    usiaInput.value = calcUsia(tglInput.value);
+    validate1();
+  });
+  if (tglInput.value) usiaInput.value = calcUsia(tglInput.value);
+
+  function validWA(raw) {
+    const v = (raw || '').replace(/\s|-/g, '');
+    // 08xxxx (10-14 digit) atau +628xxxx / 628xxxx
+    return /^(0|\+?62)8\d{7,12}$/.test(v);
+  }
+
+  function validate1() {
+    const required = ['nama', 'jenis_kelamin', 'tempat_lahir', 'tanggal_lahir', 'alamat', 'pekerjaan', 'nomor_wa'];
+    let ok = true;
+    for (const id of required) {
+      if (!document.getElementById(id).value.trim()) { ok = false; break; }
+    }
+    if (ok && !validWA(waInput.value)) ok = false;
+    btnNext1.disabled = !ok;
+    return ok;
+  }
+  form1.addEventListener('input', validate1);
+  form1.addEventListener('change', validate1);
+  validate1();
+
+  form1.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!validate1()) return;
+    if (!validWA(waInput.value)) {
+      msg1.className = 'ob-msg error';
+      msg1.textContent = 'Format nomor WhatsApp belum benar. Contoh: 081234567890 atau +6281234567890.';
+      return;
+    }
+    btnNext1.disabled = true;
+    btnNext1.textContent = 'Menyimpan...';
+    msg1.style.display = 'none';
+
+    const payload = {
+      nama: document.getElementById('nama').value.trim(),
+      jenis_kelamin: document.getElementById('jenis_kelamin').value,
+      tempat_lahir: document.getElementById('tempat_lahir').value.trim(),
+      tanggal_lahir: document.getElementById('tanggal_lahir').value,
+      alamat: document.getElementById('alamat').value.trim(),
+      pekerjaan: document.getElementById('pekerjaan').value.trim(),
+      nomor_wa: document.getElementById('nomor_wa').value.trim(),
+    };
+    const { error } = await supabaseClient
+      .from('profiles')
+      .update(payload)
+      .eq('id', userId);
+
+    btnNext1.textContent = 'Lanjut';
+    btnNext1.disabled = false;
+
+    if (error) {
+      msg1.className = 'ob-msg error';
+      msg1.textContent = 'Gagal menyimpan: ' + error.message;
+      return;
+    }
+    goStep(2);
+  });
+
+  // ===== Step 2 =====
+  document.getElementById('btnBack2').addEventListener('click', () => goStep(1));
+  document.getElementById('btnNext2').addEventListener('click', () => goStep(3));
+
+  // ===== Step 3: setujui & selesaikan =====
+  const chk = document.getElementById('chkSetuju');
+  const btnFinish = document.getElementById('btnFinish');
+  const msg3 = document.getElementById('msg3');
+  chk.addEventListener('change', () => { btnFinish.disabled = !chk.checked; });
+  document.getElementById('btnBack3').addEventListener('click', () => goStep(2));
+
+  btnFinish.addEventListener('click', async () => {
+    if (!chk.checked) return;
+    btnFinish.disabled = true;
+    btnFinish.textContent = 'Memproses...';
+    msg3.style.display = 'none';
+
+    const { error } = await supabaseClient
+      .from('profiles')
+      .update({
+        onboarding_selesai: true,
+        disetujui_pada: new Date().toISOString(),
+      })
+      .eq('id', userId);
+
+    if (error) {
+      msg3.className = 'ob-msg error';
+      msg3.textContent = 'Gagal menyimpan persetujuan: ' + error.message;
+      btnFinish.disabled = false;
+      btnFinish.textContent = 'Saya Setuju & Lanjutkan';
+      return;
+    }
+    window.location.href = 'dashboard.html';
+  });
+})();
+</script>
+
+</body>
+</html>
