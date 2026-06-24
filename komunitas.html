@@ -12,50 +12,76 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="shared.css">
 <style>
-  .komunitas-wrap{
-    padding: 130px var(--pad) 100px;
-    max-width: var(--container);
-    margin:0 auto;
+  /* ===== FULL-SCREEN PHOTO HERO ===== */
+  .komunitas-page-hero{
+    position: relative;
+    width: 100%;
+    height: 88vh;
+    min-height: 520px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+  }
+  .komunitas-hero-img{
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: 0;
+  }
+  .komunitas-hero-overlay{
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(0,0,0,0.88) 0%,
+      rgba(0,0,0,0.52) 40%,
+      rgba(0,0,0,0.22) 100%
+    );
+    z-index: 1;
+  }
+  .komunitas-hero-body{
     position: relative;
     z-index: 2;
+    max-width: var(--container);
+    margin: 0 auto;
+    width: 100%;
+    padding: 0 var(--pad) clamp(48px, 8vw, 80px);
   }
-  .komunitas-hero{
-    background: linear-gradient(155deg, var(--bg-elevated), var(--bg-soft));
-    border: 1px solid var(--card-border);
-    border-radius: var(--r-2xl);
-    padding: 44px clamp(24px,4vw,48px);
-    margin-bottom: 48px;
-    position: relative;
-    overflow: hidden;
-  }
-  .komunitas-hero::before{
-    content:'';
-    position: absolute;
-    top: -50%; right: -10%;
-    width: 60%; height: 100%;
-    background: radial-gradient(ellipse, rgba(204,255,0,0.14), transparent 70%);
-    filter: blur(40px);
-    pointer-events: none;
-  }
-  .komunitas-hero h1{
-    font-size: clamp(34px, 5vw, 56px);
+  .komunitas-hero-body h1{
+    font-size: clamp(34px, 5vw, 60px);
     letter-spacing: -0.035em;
-    margin-top: 8px;
-    position: relative;
+    margin-top: 10px;
+    line-height: 1.1;
   }
-  .komunitas-hero h1 .accent{
+  .komunitas-hero-body h1 .accent{
     background: linear-gradient(100deg, #fff 30%, var(--neon) 85%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
   }
-  .komunitas-hero p{
-    color: var(--text-mute);
-    margin-top: 14px;
-    font-size: 15px;
-    line-height: 1.7;
-    max-width: 600px;
+  .komunitas-hero-body p{
+    color: rgba(255,255,255,0.78);
+    margin-top: 16px;
+    font-size: 16px;
+    line-height: 1.75;
+    max-width: 580px;
+  }
+  @media (max-width: 600px){
+    .komunitas-page-hero{ height: 80vh; min-height: 420px; }
+    .komunitas-hero-body h1{ font-size: clamp(28px, 8vw, 40px); }
+    .komunitas-hero-body p{ font-size: 14px; }
+  }
+
+  /* ===== MAIN CONTENT ===== */
+  .komunitas-wrap{
+    padding: 48px var(--pad) 100px;
+    max-width: var(--container);
+    margin:0 auto;
     position: relative;
+    z-index: 2;
   }
   .back-link{
     display:inline-flex;
@@ -294,18 +320,28 @@
   </div>
 </nav>
 
+<!-- ============ HERO FOTO FULL-SCREEN ============ -->
+<section class="komunitas-page-hero">
+  <img
+    src="foto-komunitas-hero.jpg"
+    alt="Jemaat GRIA bersama dalam komunitas"
+    class="komunitas-hero-img"
+    loading="eager"
+    onerror="this.style.opacity='0'"
+  >
+  <div class="komunitas-hero-overlay"></div>
+  <div class="komunitas-hero-body">
+    <span class="eyebrow">Kehidupan Bersama</span>
+    <h1>Komunitas <span class="accent">GRIA</span></h1>
+    <p>Bersama-sama bertumbuh dalam iman, saling menguatkan, dan membangun kehidupan yang berdampak melalui komunitas yang penuh kasih.</p>
+  </div>
+</section>
+
 <main class="komunitas-wrap">
   <a href="index.html" class="back-link">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
     Kembali ke Beranda
   </a>
-
-  <!-- ============ HERO ============ -->
-  <section class="komunitas-hero">
-    <span class="eyebrow">Kehidupan Bersama</span>
-    <h1>Komunitas <span class="accent">GRIA</span></h1>
-    <p>Bersama-sama bertumbuh dalam iman, saling menguatkan, dan membangun kehidupan yang berdampak melalui komunitas yang penuh kasih.</p>
-  </section>
 
   <!-- ============ KKR - KELOMPOK KONSELING RESTORASI ============ -->
   <section class="komunitas-block">
@@ -400,6 +436,7 @@
     </div>
 
     <div class="bday-section">
+      <!-- ULANG-TAHUN:START -->
       <div class="bday-carousel">
         <div class="bday-card"><div class="bday-avatar">A</div><h4>Andreas P.</h4><span>3 September</span></div>
         <div class="bday-card"><div class="bday-avatar">M</div><h4>Maria S.</h4><span>9 September</span></div>
@@ -407,6 +444,7 @@
         <div class="bday-card"><div class="bday-avatar">R</div><h4>Rebecca T.</h4><span>21 September</span></div>
         <div class="bday-card"><div class="bday-avatar">Y</div><h4>Yohanes B.</h4><span>27 September</span></div>
       </div>
+      <!-- ULANG-TAHUN:END -->
     </div>
   </section>
 

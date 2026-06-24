@@ -1,4 +1,4 @@
-name: Update Warta Jemaat dari Google Sheet
+name: Update Warta & Ulang Tahun dari Google Sheet
 
 "on":
   schedule:
@@ -11,7 +11,7 @@ permissions:
   contents: write
 
 jobs:
-  update-warta:
+  update-konten:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -31,11 +31,17 @@ jobs:
           SPREADSHEET_ID: '1QJZf9hmfc5IQe5VE6OpHlLTmegBRhqyQq0wupx8z8fY'
         run: python update_warta.py
 
+      - name: Jalankan script update ulang tahun
+        env:
+          GOOGLE_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
+          SPREADSHEET_ID: '1QJZf9hmfc5IQe5VE6OpHlLTmegBRhqyQq0wupx8z8fY'
+        run: python update_ulang_tahun.py
+
       - name: Commit & push jika ada perubahan
         run: |
           git config user.name "GRIA Auto Update Bot"
           git config user.email "actions@github.com"
-          git add warta.html index.html
-          git diff --cached --quiet || git commit -m "Auto-update warta.html & info ibadah dari Google Sheet"
+          git add warta.html index.html komunitas.html
+          git diff --cached --quiet || git commit -m "Auto-update warta.html, index.html & ulang tahun komunitas.html dari Google Sheet"
           git pull --rebase origin main
           git push
