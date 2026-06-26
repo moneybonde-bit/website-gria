@@ -41,7 +41,7 @@ jobs:
         run: |
           git config user.name "GRIA Auto Update Bot"
           git config user.email "actions@github.com"
-          git add warta.html index.html komunitas.html
-          git diff --cached --quiet || git commit -m "Auto-update warta.html, index.html & ulang tahun komunitas.html dari Google Sheet"
+          git add warta.html index.html
+          git diff --cached --quiet || git commit -m "Auto-update warta.html & index.html dari Google Sheet (termasuk ulang tahun)"
           git pull --rebase origin main
           git push

@@ -1,7 +1,8 @@
 """
-Script ini membaca data ulang tahun dari Google Sheet tab "UlangTahun" dan
-menghasilkan ulang section "Ulang Tahun Bulan Ini" di komunitas.html — hanya
-menampilkan jemaat yang ulang tahun di bulan berjalan, diurutkan per tanggal.
+Script ini membaca data ulang tahun dari Google Sheet tab "UlangTahun" (atau
+"Ulang Tahun" dengan spasi) dan menghasilkan ulang section "Ulang Tahun Bulan Ini"
+di warta.html — hanya menampilkan jemaat yang ulang tahun di bulan berjalan,
+diurutkan per tanggal.
 
 Struktur kolom sheet yang diharapkan (baris pertama = header):
     Nama     | Tanggal | Bulan
@@ -28,7 +29,10 @@ import gspread
 from google.oauth2.service_account import Credentials
 
 SPREADSHEET_ID = os.environ.get("SPREADSHEET_ID", "1QJZf9hmfc5IQe5VE6OpHlLTmegBRhqyQq0wupx8z8fY")
-KOMUNITAS_HTML_PATH = os.environ.get("KOMUNITAS_HTML_PATH", "komunitas.html")
+WARTA_HTML_PATH = os.environ.get("WARTA_HTML_PATH", "warta.html")
+
+# Nama tab yang dicoba secara berurutan — menangani variasi penulisan nama tab
+CANDIDATE_SHEET_NAMES = ["UlangTahun", "Ulang Tahun", "ulang tahun", "ulang_tahun"]
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
 
@@ -134,6 +138,18 @@ def _empty_msg(text):
     return f'<p style="color:var(--grey-dim);text-align:center;padding:32px 0;">{escape_html(text)}</p>'
 
 
+def open_worksheet(sh):
+    """Coba buka worksheet ulang tahun dengan berbagai kemungkinan nama tab."""
+    for name in CANDIDATE_SHEET_NAMES:
+        try:
+            ws = sh.worksheet(name)
+            print(f"  Sheet ditemukan dengan nama tab: '{name}'")
+            return ws
+        except gspread.exceptions.WorksheetNotFound:
+            continue
+    return None
+
+
 def main():
     bulan_ini = date.today().month
     print(f"Memfilter ulang tahun untuk bulan: {NAMA_BULAN[bulan_ini]} ({bulan_ini})")
@@ -141,15 +157,18 @@ def main():
     client = get_client()
     sh = client.open_by_key(SPREADSHEET_ID)
 
-    try:
-        ws = sh.worksheet("UlangTahun")
-    except gspread.exceptions.WorksheetNotFound:
-        print("Sheet 'UlangTahun' belum ada di spreadsheet — buat tab tersebut untuk mengaktifkan auto-update ulang tahun.")
+    ws = open_worksheet(sh)
+    if ws is None:
+        print(
+            f"Sheet ulang tahun belum ada di spreadsheet. "
+            f"Nama tab yang dicoba: {CANDIDATE_SHEET_NAMES}. "
+            f"Buat salah satu tab tersebut untuk mengaktifkan auto-update ulang tahun."
+        )
         sys.exit(0)
 
     bday_html = build_bday_html(ws, bulan_ini)
 
-    with open(KOMUNITAS_HTML_PATH, "r", encoding="utf-8") as f:
+    with open(WARTA_HTML_PATH, "r", encoding="utf-8") as f:
         content = f.read()
 
     start_marker = "<!-- ULANG-TAHUN:START -->"
@@ -159,7 +178,7 @@ def main():
     end_idx = content.find(end_marker)
 
     if start_idx == -1 or end_idx == -1:
-        print("ERROR: marker ULANG-TAHUN:START / END tidak ditemukan di komunitas.html")
+        print(f"ERROR: marker ULANG-TAHUN:START / END tidak ditemukan di {WARTA_HTML_PATH}")
         sys.exit(1)
 
     end_idx += len(end_marker)
@@ -167,11 +186,11 @@ def main():
     new_content = content[:start_idx] + replacement + content[end_idx:]
 
     if new_content == content:
-        print("Tidak ada perubahan, komunitas.html tidak ditulis ulang.")
+        print(f"Tidak ada perubahan, {WARTA_HTML_PATH} tidak ditulis ulang.")
     else:
-        with open(KOMUNITAS_HTML_PATH, "w", encoding="utf-8") as f:
+        with open(WARTA_HTML_PATH, "w", encoding="utf-8") as f:
             f.write(new_content)
-        print("komunitas.html berhasil diupdate dengan data ulang tahun dari Google Sheet.")
+        print(f"{WARTA_HTML_PATH} berhasil diupdate dengan data ulang tahun dari Google Sheet.")
 
 
 if __name__ == "__main__":
