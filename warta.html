@@ -106,6 +106,128 @@
     margin-bottom: 20px;
     line-height: 1.7;
   }
+
+  /* ===== PERSEMBAHAN KASIH AGAPE ===== */
+  .agape-card{
+    background: linear-gradient(155deg, var(--bg-elevated), #0c0c0e);
+    border: 1px solid var(--card-border);
+    border-radius: var(--r-xl);
+    overflow: hidden;
+    max-width: 520px;
+    transition: border-color var(--dur-mid) var(--ease-out);
+  }
+  .agape-card:hover{ border-color: rgba(204,255,0,0.2); }
+  .agape-card-header{
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 28px 32px 22px;
+    border-bottom: 1px solid var(--card-border);
+  }
+  .agape-bank-icon{
+    width: 48px; height: 48px;
+    background: rgba(204,255,0,0.08);
+    border: 1px solid rgba(204,255,0,0.2);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .agape-bank-icon svg{ width: 22px; height: 22px; stroke: var(--neon); }
+  .agape-label{
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--neon);
+    margin-bottom: 4px;
+  }
+  .agape-bank-name{
+    font-family: var(--font-display);
+    font-size: 19px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .agape-card-body{
+    padding: 22px 32px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    border-bottom: 1px solid var(--card-border);
+  }
+  .agape-field{ display: flex; flex-direction: column; gap: 6px; }
+  .agape-field-label{
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-mute);
+  }
+  .agape-field-row{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .agape-field-value{
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.04em;
+  }
+  .agape-copy-btn{
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    min-height: 44px;
+    border-radius: var(--r-full);
+    background: rgba(204,255,0,0.09);
+    border: 1px solid rgba(204,255,0,0.22);
+    color: var(--neon);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: background var(--dur-mid) var(--ease-out),
+                transform var(--dur-fast) var(--ease-spring);
+    white-space: nowrap;
+  }
+  .agape-copy-btn:hover{ background: rgba(204,255,0,0.16); transform: scale(1.03); }
+  .agape-copy-btn.copied{ background: rgba(204,255,0,0.22); }
+  .agape-card-footer{ padding: 20px 32px 28px; }
+  .agape-wa-btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    background: var(--neon);
+    color: #0a0a0a;
+    font-weight: 700;
+    font-size: 14.5px;
+    padding: 14px 24px;
+    border-radius: var(--r-full);
+    min-height: 52px;
+    transition: transform var(--dur-mid) var(--ease-spring),
+                box-shadow var(--dur-mid) var(--ease-out);
+    box-shadow: 0 8px 24px rgba(204,255,0,0.18);
+    letter-spacing: 0.01em;
+  }
+  .agape-wa-btn:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 14px 36px rgba(204,255,0,0.3);
+  }
+  .agape-wa-btn svg{ width: 20px; height: 20px; fill: #0a0a0a; flex-shrink: 0; }
+  @media (max-width: 920px){ .agape-card{ max-width: 100%; } }
+  @media (max-width: 600px){
+    .agape-card-header{ padding: 20px 20px 16px; }
+    .agape-card-body{ padding: 18px 20px 20px; }
+    .agape-card-footer{ padding: 16px 20px 22px; }
+    .agape-copy-btn{ width: 100%; justify-content: center; }
+  }
 </style>
 </head>
 <body>
@@ -282,6 +404,57 @@
   </div>
   </section>
   <!-- AUTO-GENERATED:END -->
+
+  <!-- ============ PERSEMBAHAN KASIH AGAPE ============ -->
+  <section class="warta-block">
+    <h2><span class="badge-num">04</span> Persembahan Kasih Agape</h2>
+    <p class="block-lead">Bersama-sama kita menopang pelayanan GRIA melalui Persembahan Kasih Agape. Setiap dukungan yang diberikan dengan sukacita adalah wujud nyata kebersamaan kita sebagai tubuh Kristus yang saling merawat.</p>
+
+    <div class="agape-card">
+      <div class="agape-card-header">
+        <div class="agape-bank-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+            <line x1="3" y1="22" x2="21" y2="22"/><line x1="6" y1="18" x2="6" y2="11"/><line x1="10" y1="18" x2="10" y2="11"/><line x1="14" y1="18" x2="14" y2="11"/><line x1="18" y1="18" x2="18" y2="11"/><polygon points="12 2 20 7 4 7"/>
+          </svg>
+        </div>
+        <div>
+          <div class="agape-label">Rekening Gereja</div>
+          <div class="agape-bank-name">[NAMA BANK]</div><!-- TODO: ganti dengan data asli -->
+        </div>
+      </div>
+
+      <div class="agape-card-body">
+        <div class="agape-field">
+          <span class="agape-field-label">Nomor Rekening</span>
+          <div class="agape-field-row">
+            <span class="agape-field-value" id="agapeNorek">[NOMOR REKENING]</span><!-- TODO: ganti dengan data asli -->
+            <button class="agape-copy-btn" id="agapeCopyBtn" aria-label="Salin nomor rekening ke clipboard">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              Salin Nomor
+            </button>
+          </div>
+        </div>
+        <div class="agape-field">
+          <span class="agape-field-label">Atas Nama</span>
+          <span class="agape-field-value">[NAMA PEMILIK REKENING]</span><!-- TODO: ganti dengan data asli -->
+        </div>
+      </div>
+
+      <div class="agape-card-footer">
+        <!-- TODO: ganti 62XXXXXXXXXX dengan nomor WhatsApp aktif bendahara -->
+        <a href="https://wa.me/62XXXXXXXXXX?text=Halo%2C%20saya%20ingin%20konfirmasi%20persembahan%20kasih%20agape"
+           class="agape-wa-btn"
+           target="_blank"
+           rel="noopener noreferrer"
+           aria-label="Konfirmasi persembahan ke bendahara via WhatsApp">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+          </svg>
+          Konfirmasi ke Bendahara
+        </a>
+      </div>
+    </div>
+  </section>
 </main>
 
 <footer id="kontak">
@@ -327,6 +500,24 @@
   }
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
+})();
+
+(function(){
+  var btn = document.getElementById('agapeCopyBtn');
+  var norek = document.getElementById('agapeNorek');
+  if(!btn || !norek) return;
+  btn.addEventListener('click', function(){
+    var text = norek.textContent.trim();
+    var origHTML = btn.innerHTML;
+    navigator.clipboard.writeText(text).then(function(){
+      btn.textContent = 'Tersalin!';
+      btn.classList.add('copied');
+      setTimeout(function(){
+        btn.innerHTML = origHTML;
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  });
 })();
 </script>
 </body>
