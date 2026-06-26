@@ -107,6 +107,21 @@
     line-height: 1.7;
   }
 
+  /* ===== ULANG TAHUN BULAN INI ===== */
+  /* Carousel extends to section padding edges on mobile so cards don't look clipped */
+  .warta-block .bday-section{
+    margin-left: calc(-1 * var(--pad));
+    margin-right: calc(-1 * var(--pad));
+    padding-left: var(--pad);
+    padding-right: var(--pad);
+    overflow: hidden;
+  }
+  .warta-block .bday-carousel{
+    padding-left: 0;
+    padding-right: 0;
+    mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+  }
+
   /* ===== PERSEMBAHAN KASIH AGAPE ===== */
   .agape-card{
     background: linear-gradient(155deg, var(--bg-elevated), #0c0c0e);
@@ -405,9 +420,20 @@
   </section>
   <!-- AUTO-GENERATED:END -->
 
+  <!-- ============ ULANG TAHUN BULAN INI ============ -->
+  <section class="warta-block" id="ulang-tahun">
+    <h2><span class="badge-num">04</span> Ulang Tahun Bulan Ini</h2>
+    <p class="block-lead">Selamat ulang tahun untuk jemaat GRIA yang berulang tahun bulan ini. Kiranya Tuhan memberkati dan menyertai setiap langkah.</p>
+    <div class="bday-section">
+      <!-- ULANG-TAHUN:START -->
+      <p style="color:var(--grey-dim);text-align:center;padding:32px 0;">Data ulang tahun sedang dimuat dari Google Sheet...</p>
+      <!-- ULANG-TAHUN:END -->
+    </div>
+  </section>
+
   <!-- ============ PERSEMBAHAN KASIH AGAPE ============ -->
   <section class="warta-block">
-    <h2><span class="badge-num">04</span> Persembahan Kasih Agape</h2>
+    <h2><span class="badge-num">05</span> Persembahan Kasih Agape</h2>
     <p class="block-lead">Bersama-sama kita menopang pelayanan GRIA melalui Persembahan Kasih Agape. Setiap dukungan yang diberikan dengan sukacita adalah wujud nyata kebersamaan kita sebagai tubuh Kristus yang saling merawat.</p>
 
     <div class="agape-card">
