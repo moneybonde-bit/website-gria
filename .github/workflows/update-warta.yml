@@ -25,23 +25,41 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Jalankan script update warta
+      - name: Update konten & push (dengan retry aman dari race condition)
         env:
           GOOGLE_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
           SPREADSHEET_ID: '1QJZf9hmfc5IQe5VE6OpHlLTmegBRhqyQq0wupx8z8fY'
-        run: python update_warta.py
-
-      - name: Jalankan script update ulang tahun
-        env:
-          GOOGLE_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
-          SPREADSHEET_ID: '1QJZf9hmfc5IQe5VE6OpHlLTmegBRhqyQq0wupx8z8fY'
-        run: python update_ulang_tahun.py
-
-      - name: Commit & push jika ada perubahan
         run: |
           git config user.name "GRIA Auto Update Bot"
           git config user.email "actions@github.com"
-          git add warta.html index.html
-          git diff --cached --quiet || git commit -m "Auto-update warta.html & index.html dari Google Sheet (termasuk ulang tahun)"
-          git pull --rebase origin main
-          git push
+
+          # Regenerasi ulang dari main terbaru di tiap percobaan, bukan rebase,
+          # supaya tidak ada conflict kalau ada commit lain (mis. merge PR) yang
+          # masuk ke main persis saat job ini jalan.
+          for attempt in 1 2 3 4 5; do
+            echo "=== Percobaan ke-$attempt ==="
+            git fetch origin main
+            git reset --hard origin/main
+
+            python update_warta.py
+            python update_ulang_tahun.py
+
+            git add warta.html index.html
+            if git diff --cached --quiet; then
+              echo "Tidak ada perubahan, selesai."
+              exit 0
+            fi
+
+            git commit -m "Auto-update warta.html & index.html dari Google Sheet (termasuk ulang tahun)"
+
+            if git push origin HEAD:main; then
+              echo "Push berhasil."
+              exit 0
+            fi
+
+            echo "Push gagal (kemungkinan race dengan commit lain), fetch ulang & coba lagi..."
+            sleep $((attempt * 5))
+          done
+
+          echo "Gagal push setelah beberapa percobaan."
+          exit 1
