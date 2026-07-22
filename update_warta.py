@@ -105,7 +105,9 @@ def parse_tanggal_id(text):
 
 def build_pelayan_ibadah_raya_block(ws):
     """Bangun kartu 'Pelayan Ibadah Raya' untuk index.html dari sheet JadwalPelayanan,
-    memilih kolom minggu yang tanggalnya paling dekat dengan hari ini."""
+    memilih kolom minggu ibadah yang akan datang (atau hari ini) — sama seperti tanggal
+    yang dipakai untuk info ibadah 'Minggu Ini'. Kalau semua kolom sudah lewat, pakai
+    kolom minggu terakhir (paling baru)."""
     rows = ws.get_all_values()
     header_row_idx = next(i for i, r in enumerate(rows) if r and r[0] == "Bidang")
     data_rows = [r for r in rows[header_row_idx + 1:] if r and r[0].strip()]
@@ -117,16 +119,16 @@ def build_pelayan_ibadah_raya_block(ws):
     tanggal_cols = [data_rows[0][1 + 2 * i] for i in range(n_weeks)]
 
     today = datetime.date.today()
-    best_idx = 0
-    best_diff = None
-    for i, tgl in enumerate(tanggal_cols):
-        d = parse_tanggal_id(tgl)
-        if d is None:
-            continue
-        diff = abs((d - today).days)
-        if best_diff is None or diff < best_diff:
-            best_diff = diff
-            best_idx = i
+    parsed = [(i, parse_tanggal_id(tgl)) for i, tgl in enumerate(tanggal_cols)]
+    parsed = [(i, d) for i, d in parsed if d is not None]
+
+    upcoming = [(i, d) for i, d in parsed if d >= today]
+    if upcoming:
+        best_idx = min(upcoming, key=lambda pair: pair[1])[0]
+    elif parsed:
+        best_idx = max(parsed, key=lambda pair: pair[1])[0]
+    else:
+        best_idx = 0
 
     tanggal_raw = tanggal_cols[best_idx]
     tanggal_display = re.sub(r"^\w+,\s*", "", tanggal_raw).strip()
