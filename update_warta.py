@@ -11,12 +11,28 @@ Cara pakai (lokal, untuk testing):
 Di GitHub Actions, kedua env var di atas diambil dari repository secrets.
 """
 
+import datetime
 import os
 import json
 import re
 import sys
 import gspread
 from google.oauth2.service_account import Credentials
+
+BULAN_ID = {
+    "januari": 1, "februari": 2, "maret": 3, "april": 4, "mei": 5, "juni": 6,
+    "juli": 7, "agustus": 8, "september": 9, "oktober": 10, "november": 11, "desember": 12,
+}
+
+# Label tampilan di kartu "Pelayan Ibadah Raya" (index.html) untuk tiap Bidang di sheet JadwalPelayanan.
+PELAYAN_LABEL_MAP = {
+    "pelayan firman": "Khotbah",
+    "liturgos": "Liturgos",
+    "operator lcd": "Operator LCD",
+    "singer": "Singers",
+    "pendoa syafaat": "Doa Syafaat",
+    "kolektan": "Usher & Kolekan",
+}
 
 SPREADSHEET_ID = os.environ.get("SPREADSHEET_ID", "1QJZf9hmfc5IQe5VE6OpHlLTmegBRhqyQq0wupx8z8fY")
 WARTA_HTML_PATH = os.environ.get("WARTA_HTML_PATH", "warta.html")
@@ -70,6 +86,70 @@ def build_jadwal_pelayanan_table(ws):
         html.append("</tr>")
     html.append("</table>")
     return "\n    ".join(html)
+
+
+def parse_tanggal_id(text):
+    """Parse tanggal Indonesia seperti 'Minggu, 5 Juli 2026' menjadi datetime.date."""
+    m = re.search(r"(\d{1,2})\s+(\w+)\s+(\d{4})", text or "")
+    if not m:
+        return None
+    day, month_name, year = m.groups()
+    month = BULAN_ID.get(month_name.lower())
+    if not month:
+        return None
+    try:
+        return datetime.date(int(year), month, int(day))
+    except ValueError:
+        return None
+
+
+def build_pelayan_ibadah_raya_block(ws):
+    """Bangun kartu 'Pelayan Ibadah Raya' untuk index.html dari sheet JadwalPelayanan,
+    memilih kolom minggu yang tanggalnya paling dekat dengan hari ini."""
+    rows = ws.get_all_values()
+    header_row_idx = next(i for i, r in enumerate(rows) if r and r[0] == "Bidang")
+    data_rows = [r for r in rows[header_row_idx + 1:] if r and r[0].strip()]
+
+    if not data_rows:
+        return None
+
+    n_weeks = (len(data_rows[0]) - 1) // 2
+    tanggal_cols = [data_rows[0][1 + 2 * i] for i in range(n_weeks)]
+
+    today = datetime.date.today()
+    best_idx = 0
+    best_diff = None
+    for i, tgl in enumerate(tanggal_cols):
+        d = parse_tanggal_id(tgl)
+        if d is None:
+            continue
+        diff = abs((d - today).days)
+        if best_diff is None or diff < best_diff:
+            best_diff = diff
+            best_idx = i
+
+    tanggal_raw = tanggal_cols[best_idx]
+    tanggal_display = re.sub(r"^\w+,\s*", "", tanggal_raw).strip()
+
+    items_html = []
+    for row in data_rows:
+        bidang_raw = row[0].strip()
+        label = PELAYAN_LABEL_MAP.get(bidang_raw.lower(), bidang_raw)
+        nama = row[2 + 2 * best_idx] if len(row) > 2 + 2 * best_idx else "-"
+        items_html.append(
+            f"              <li><b>{escape_html(label)}</b><span>{escape_html(nama)}</span></li>"
+        )
+
+    return f"""<div class="accordion-item">
+        <button class="accordion-trigger" aria-expanded="false">Pelayan Ibadah Raya ({escape_html(tanggal_display)}) <span class="plus" aria-hidden="true"></span></button>
+        <div class="accordion-panel">
+          <div class="accordion-panel-inner">
+            <ul class="serv-list">
+{chr(10).join(items_html)}
+            </ul>
+          </div>
+        </div>
+      </div>"""
 
 
 def build_laporan_persembahan_table(ws):
@@ -195,6 +275,17 @@ def replace_marker(content, marker_name, new_value):
     return pattern.sub(r"\1" + escape_html(new_value) + r"\2", content)
 
 
+def replace_raw_marker(content, marker_name, new_html):
+    """Replace content between <!-- MARKER:START -->...<!-- /MARKER --> markers tanpa escaping HTML."""
+    pattern = re.compile(
+        r"(<!--\s*" + re.escape(marker_name) + r":START\s*-->)"
+        r".*?"
+        r"(<!--\s*/" + re.escape(marker_name) + r"\s*-->)",
+        re.DOTALL,
+    )
+    return pattern.sub(lambda m: m.group(1) + "\n      " + new_html + "\n      " + m.group(2), content)
+
+
 def read_info_ibadah(ws):
     """Sheet InfoIbadah: Row 1 = header (Tanggal, Tema, Pembicara), Row 2 = values."""
     rows = ws.get_all_values()
@@ -217,31 +308,36 @@ def read_info_ibadah(ws):
     }
 
 
-def update_index_html(ibadah_info):
-    """Update worship info markers in index.html with data from InfoIbadah sheet."""
-    if not ibadah_info:
-        print("Tidak ada data InfoIbadah, index.html tidak diupdate.")
-        return False
-
+def update_index_html(ibadah_info, pelayan_block=None):
+    """Update worship info markers & kartu Pelayan Ibadah Raya di index.html."""
     with open(INDEX_HTML_PATH, "r", encoding="utf-8") as f:
         content = f.read()
 
     new_content = content
-    if ibadah_info["tanggal"]:
-        new_content = replace_marker(new_content, "IBADAH_TANGGAL", ibadah_info["tanggal"])
-    if ibadah_info["tema"]:
-        new_content = replace_marker(new_content, "IBADAH_TEMA", ibadah_info["tema"])
-    if ibadah_info["pembicara"]:
-        new_content = replace_marker(new_content, "IBADAH_PEMBICARA", ibadah_info["pembicara"])
+
+    if ibadah_info:
+        if ibadah_info["tanggal"]:
+            new_content = replace_marker(new_content, "IBADAH_TANGGAL", ibadah_info["tanggal"])
+        if ibadah_info["tema"]:
+            new_content = replace_marker(new_content, "IBADAH_TEMA", ibadah_info["tema"])
+        if ibadah_info["pembicara"]:
+            new_content = replace_marker(new_content, "IBADAH_PEMBICARA", ibadah_info["pembicara"])
+    else:
+        print("Tidak ada data InfoIbadah, info ibadah di index.html tidak diupdate.")
+
+    if pelayan_block:
+        new_content = replace_raw_marker(new_content, "PELAYAN_IBADAH", pelayan_block)
+    else:
+        print("Tidak ada data JadwalPelayanan, kartu Pelayan Ibadah Raya tidak diupdate.")
 
     if new_content == content:
-        print("Tidak ada perubahan data ibadah, index.html tidak ditulis ulang.")
+        print("Tidak ada perubahan data, index.html tidak ditulis ulang.")
         return False
 
     with open(INDEX_HTML_PATH, "w", encoding="utf-8") as f:
         f.write(new_content)
 
-    print("index.html berhasil diupdate dengan info ibadah dari Google Sheet.")
+    print("index.html berhasil diupdate dari Google Sheet.")
     return True
 
 
@@ -257,6 +353,7 @@ def main():
     jadwal_html = build_jadwal_pelayanan_table(ws_jadwal)
     persembahan_html = build_laporan_persembahan_table(ws_persembahan)
     info_table_html, info_kalimat, pekan_info = build_info_umum_table(ws_info)
+    pelayan_block = build_pelayan_ibadah_raya_block(ws_jadwal)
 
     new_block = build_auto_block(jadwal_html, persembahan_html, info_table_html, info_kalimat, pekan_info)
 
@@ -284,12 +381,14 @@ def main():
         print("warta.html berhasil diupdate dari Google Sheet.")
 
     # --- Update index.html (info ibadah) ---
+    ibadah_info = None
     try:
         ws_ibadah = sh.worksheet("InfoIbadah")
         ibadah_info = read_info_ibadah(ws_ibadah)
-        update_index_html(ibadah_info)
     except gspread.exceptions.WorksheetNotFound:
         print("Sheet 'InfoIbadah' belum ada di spreadsheet. Buat sheet tersebut untuk mengaktifkan auto-update info ibadah.")
+
+    update_index_html(ibadah_info, pelayan_block)
 
 
 if __name__ == "__main__":
